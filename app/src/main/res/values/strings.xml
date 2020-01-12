@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Tribune-app</string>
+    <string name="enter_login">Enter login</string>
+    <string name="enter_password">Enter password</string>
+    <string name="registration">registration</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="invalid_password">Password is incorrect</string>
+    <string name="please_wait">Please wait....</string>
+    <string name="authentication">Authentication</string>
+    <string name="success">Success</string>
+    <string name="authentication_failed">Authentication failed</string>
+    <string name="different_passwords">Passwords aren\'t the same</string>
+    <string name="signup">Registration</string>
+    <string name="registration_failed">Registration failed</string>
+
 </resources>

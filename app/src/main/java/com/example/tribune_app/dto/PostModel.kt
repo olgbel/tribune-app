@@ -25,7 +25,6 @@ data class PostModel(
 ) {
     var likeActionPerforming = false
     var dislikeActionPerforming = false
-    var openLinkBtnClickListener = false
 }
 
 

@@ -15,7 +15,7 @@ import org.jetbrains.anko.toast
 
 class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     PostAdapter.OnLikeBtnClickListener, PostAdapter.OnDislikeBtnClickListener,
-    PostAdapter.OnOpenLinkBtnClickListener {
+    PostAdapter.OnViewsBtnClickListener {
 
     private var dialog: ProgressDialog? = null
 
@@ -46,7 +46,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                     ).apply {
                         likeBtnClickListener = this@FeedActivity
                         dislikeBtnClickListener = this@FeedActivity
-                        openLinkBtnClickListener = this@FeedActivity
+                        viewsBtnClickListener = this@FeedActivity
                     }
                 }
             } else {
@@ -63,7 +63,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onOpenLinkBtnClicked(item: PostModel, position: Int) {
+    override fun onViewsBtnClicked(item: PostModel, position: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

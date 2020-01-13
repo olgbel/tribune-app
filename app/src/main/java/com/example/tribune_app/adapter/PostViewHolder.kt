@@ -41,18 +41,11 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                 }
             }
 
-            openLinkBtn.setOnClickListener {
+            viewsBtn.setOnClickListener {
                 val currentPosition = adapterPosition
                 if (currentPosition != RecyclerView.NO_POSITION) {
                     val item = adapter.list[currentPosition]
-                    if (item.openLinkBtnClickListener) {
-                        context.toast(R.string.open_link_in_progress)
-                    } else {
-                        adapter.openLinkBtnClickListener?.onOpenLinkBtnClicked(
-                            item,
-                            currentPosition
-                        )
-                    }
+                    adapter.viewsBtnClickListener?.onViewsBtnClicked(item, currentPosition)
                 }
             }
         }
@@ -68,10 +61,9 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
             likesTv.text = post.likes.size.toString()
             dislikesTv.text = post.dislikes.size.toString()
 
-            if (post.author.avatar != null){
+            if (post.author.avatar != null) {
                 loadImage(avatarImg, post.author.avatar!!.url)
-            }
-            else {
+            } else {
                 TODO()
             }
 

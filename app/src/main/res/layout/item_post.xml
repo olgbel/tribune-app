@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/avatarIv"
+        android:id="@+id/avatarImg"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="5dp"
@@ -24,7 +24,7 @@
         android:textColor="@android:color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/badgeTv"
-        app:layout_constraintStart_toEndOf="@id/avatarIv"
+        app:layout_constraintStart_toEndOf="@id/avatarImg"
         tools:text="Netology" />
 
     <TextView
@@ -34,7 +34,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
         android:textColor="@android:color/black"
-        app:layout_constraintLeft_toRightOf="@id/avatarIv"
+        app:layout_constraintLeft_toRightOf="@id/avatarImg"
         app:layout_constraintTop_toBottomOf="@id/authorTv"
         tools:text="promoter" />
 
@@ -60,7 +60,7 @@
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toStartOf="@id/openLinkBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avatarIv"
+        app:layout_constraintTop_toBottomOf="@+id/avatarImg"
         tools:text="First post in our network!" />
 
     <FrameLayout
@@ -87,7 +87,7 @@
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/contentTv"
-        app:layout_constraintTop_toBottomOf="@id/avatarIv"
+        app:layout_constraintTop_toBottomOf="@id/avatarImg"
         app:srcCompat="@android:drawable/ic_menu_set_as"
         tools:layout_editor_absoluteX="336dp"
         tools:layout_editor_absoluteY="44dp" />

@@ -1,15 +1,22 @@
 package com.example.tribune_app
 
+import android.graphics.Bitmap
 import com.example.tribune_app.api.API
 import com.example.tribune_app.api.AuthRequestParams
 import com.example.tribune_app.api.RegistrationRequestParams
 import com.example.tribune_app.api.interceptor.InjectAuthTokenInterceptor
+import com.example.tribune_app.dto.AttachmentModel
 import com.example.tribune_app.utils.BASE_URL
+import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import java.io.ByteArrayOutputStream
 
 object Repository {
 
@@ -50,4 +57,26 @@ object Repository {
                 password
             )
         )
+
+    suspend fun getRecentPosts() = API.getRecentPosts()
+
+    suspend fun getPostsAfter(id: Long) = API.getPostsAfter(id)
+
+    suspend fun getPostsBefore(id: Long) = API.getPostsBefore(id)
+
+    suspend fun likedByMe(id: Long) = API.likedByMe(id)
+
+    suspend fun dislikeByMe(id: Long) = API.dislikeByMe(id)
+
+    suspend fun upload(bitmap: Bitmap): Response<AttachmentModel> {
+        val bos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
+        val reqFIle =
+            RequestBody.create(MediaType.parse("image/jpeg"), bos.toByteArray())
+        val body =
+            MultipartBody.Part.createFormData("file", "image.jpg", reqFIle)
+        return API.uploadImage(body)
+    }
+
+
 }

@@ -12,5 +12,10 @@
     <string name="different_passwords">Passwords aren\'t the same</string>
     <string name="signup">Registration</string>
     <string name="registration_failed">Registration failed</string>
+    <string name="downloading_posts">Downloading posts</string>
+    <string name="error_occured">Error occurred</string>
+    <string name="like_in_progress">Like is performing</string>
+    <string name="dislike_in_progress">Dislike is performing</string>
+    <string name="open_link_in_progress">Open link is performing</string>
 
 </resources>

@@ -24,4 +24,5 @@
     <string name="add_link_to_post_content">Add a link to your post</string>
     <string name="post_created_successfully">Post created successfully</string>
     <string name="empty_attachment">Please attach the image</string>
+    <string name="empty_content">Please add text to your post</string>
 </resources>

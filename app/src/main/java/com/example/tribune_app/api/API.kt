@@ -1,9 +1,6 @@
 package com.example.tribune_app.api
 
-import com.example.tribune_app.dto.AttachmentModel
-import com.example.tribune_app.dto.CreatePostRequest
-import com.example.tribune_app.dto.PostModel
-import com.example.tribune_app.dto.PushRequestParamsDto
+import com.example.tribune_app.dto.*
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -45,4 +42,7 @@ interface API {
     @Multipart
     @POST("api/v1/media")
     suspend fun uploadImage(@Part file: MultipartBody.Part): Response<AttachmentModel>
+
+    @GET("api/v1/me")
+    suspend fun getCurrentUser(): Response<UserModel>
 }

@@ -89,4 +89,6 @@ object Repository {
             )
         )
 
+    suspend fun getCurrentUser() = API.getCurrentUser()
+
 }

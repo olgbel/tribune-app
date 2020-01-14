@@ -1,5 +1,6 @@
 package com.example.tribune_app.adapter
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.transition.Visibility
@@ -7,8 +8,11 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tribune_app.CreatePostActivity
 import com.example.tribune_app.R
+import com.example.tribune_app.VotedPostActivity
 import com.example.tribune_app.dto.PostModel
+import com.example.tribune_app.dto.Reaction
 import com.example.tribune_app.utils.howLongAgo
 import com.example.tribune_app.utils.loadImage
 import kotlinx.android.synthetic.main.item_post.view.*
@@ -26,9 +30,6 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                     val item = adapter.list[currentPosition]
                     if (item.likeActionPerforming) {
                         context.toast(R.string.like_in_progress)
-                    } else if (item.likes.contains(item.author.id) || item.dislikes.contains(item.author.id)) {
-                        context.toast(R.string.already_voted)
-                        return@setOnClickListener
                     } else {
                         adapter.likeBtnClickListener?.onLikeBtnClicked(item, currentPosition)
                     }
@@ -41,9 +42,6 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                     val item = adapter.list[currentPosition]
                     if (item.dislikeActionPerforming) {
                         context.toast(R.string.dislike_in_progress)
-                    } else if (item.likes.contains(item.author.id) || item.dislikes.contains(item.author.id)) {
-                        context.toast(R.string.already_voted)
-                        return@setOnClickListener
                     } else {
                         adapter.dislikeBtnClickListener?.onDislikeBtnClicked(item, currentPosition)
                     }
@@ -51,7 +49,13 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
             }
 
             viewsBtn.setOnClickListener {
-                TODO()
+                val currentPosition = adapterPosition
+                val item = adapter.list[currentPosition]
+
+                val intent = Intent(context, VotedPostActivity::class.java)
+                intent.putExtra("postId", item.id)
+
+                (context as Activity).startActivity(intent)
             }
         }
     }
@@ -91,7 +95,7 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                 post.likeActionPerforming -> {
                     likeBtn.setImageResource(R.drawable.ic_thumb_up_pending_24dp)
                 }
-                post.likes.contains(post.author.id) -> {
+                post.isLikedByMe -> {
                     likeBtn.setImageResource(R.drawable.ic_thumb_up_active_24dp)
                     likesTv.setTextColor(ContextCompat.getColor(context, R.color.colorGreen))
                 }
@@ -105,7 +109,7 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                 post.dislikeActionPerforming -> {
                     dislikeBtn.setImageResource(R.drawable.ic_thumb_down_pending_24dp)
                 }
-                post.dislikes.contains(post.author.id) -> {
+                post.isDislikedByMe -> {
                     dislikeBtn.setImageResource(R.drawable.ic_thumb_down_active_24dp)
                     dislikesTv.setTextColor(ContextCompat.getColor(context, R.color.colorRed))
                 }
@@ -121,4 +125,6 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
 
         }
     }
+
+
 }

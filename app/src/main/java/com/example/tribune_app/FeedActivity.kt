@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tribune_app.adapter.PostAdapter
 import com.example.tribune_app.dto.PostModel
+import com.example.tribune_app.dto.Reaction
 import kotlinx.android.synthetic.main.activity_feed.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -63,14 +64,27 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         launch {
             item.likeActionPerforming = true
             with(container) {
-                adapter?.notifyItemChanged(position)
+                val userResponse = Repository.getCurrentUser()
+                if (userResponse.isSuccessful) {
+                    if (isReactedByMe(
+                            requireNotNull(userResponse.body()?.id),
+                            item.likes.plus(item.dislikes)
+                        )
+                    ) {
+                        toast(R.string.already_voted)
+                    } else {
+                        adapter?.notifyItemChanged(position)
 
-                val response = Repository.likedByMe(item.id)
-                item.likeActionPerforming = false
-                if (response.isSuccessful) {
-                    item.updateLikes(requireNotNull(response.body()))
+                        val response = Repository.likedByMe(item.id)
+                        item.likeActionPerforming = false
+                        if (response.isSuccessful) {
+                            item.updateLikes(requireNotNull(response.body()))
+                        }
+                        adapter?.notifyItemChanged(position)
+                    }
+                } else {
+                    toast("Error with current user request")
                 }
-                adapter?.notifyItemChanged(position)
             }
         }
     }
@@ -79,19 +93,35 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         launch {
             item.dislikeActionPerforming = true
             with(container) {
-                adapter?.notifyItemChanged(position)
+                val userResponse = Repository.getCurrentUser()
+                if (userResponse.isSuccessful) {
+                    if (isReactedByMe(
+                            requireNotNull(userResponse.body()?.id),
+                            item.likes.plus(item.dislikes)
+                        )
+                    ) {
+                        toast(R.string.already_voted)
+                    } else {
+                        adapter?.notifyItemChanged(position)
 
-                val response = Repository.dislikedByMe(item.id)
-                item.dislikeActionPerforming = false
-                if (response.isSuccessful) {
-                    item.updateDislikes(requireNotNull(response.body()))
+                        val response = Repository.dislikedByMe(item.id)
+                        item.dislikeActionPerforming = false
+                        if (response.isSuccessful) {
+                            item.updateDislikes(requireNotNull(response.body()))
+                        }
+                        adapter?.notifyItemChanged(position)
+                    }
+                } else {
+                    toast("Error with current user request")
                 }
-                adapter?.notifyItemChanged(position)
             }
         }
     }
 
     override fun onViewsBtnClicked(item: PostModel, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO()
     }
+
+    private fun isReactedByMe(userId: Long, reactionSet: Set<Reaction>) =
+        reactionSet.any { it.userId == userId }
 }

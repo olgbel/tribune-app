@@ -17,8 +17,10 @@ data class PostModel(
     var badge: String,
     val dtCreation: Int,
     val content: String,
-    var likes: Set<Long>,
-    var dislikes: Set<Long>,
+    var likes: Set<Reaction>,
+    var isLikedByMe: Boolean,
+    var dislikes: Set<Reaction>,
+    var isDislikedByMe: Boolean,
     var views: Int,
     val linkURL: String? = null,
     val attachment: AttachmentModel
@@ -29,10 +31,17 @@ data class PostModel(
     fun updateLikes(updatedModel: PostModel) {
         if (id != updatedModel.id) throw IllegalAccessException("Ids are different")
         likes = updatedModel.likes
+
+        if (updatedModel.likes.filter { it.userId == author.id }.isNotEmpty()){
+            isLikedByMe = true
+        }
     }
     fun updateDislikes(updatedModel: PostModel) {
         if (id != updatedModel.id) throw IllegalAccessException("Ids are different")
         dislikes = updatedModel.dislikes
+        if (updatedModel.dislikes.filter { it.userId == author.id }.isNotEmpty()){
+            isDislikedByMe = true
+        }
     }
 }
 

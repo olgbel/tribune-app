@@ -9,54 +9,57 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tribune_app.R
 import com.example.tribune_app.dto.PostModel
+import com.example.tribune_app.utils.howLongAgo
 import com.example.tribune_app.utils.loadImage
 import kotlinx.android.synthetic.main.item_post.view.*
+import kotlinx.android.synthetic.main.main_info_post.view.*
+import kotlinx.android.synthetic.main.reaction_buttons_footer.view.*
 import org.jetbrains.anko.toast
 
 class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHolder(view) {
 
-    init {
-        with(itemView) {
-            likeBtn.setOnClickListener {
-                val currentPosition = adapterPosition
-                if (currentPosition != RecyclerView.NO_POSITION) {
-                    val item = adapter.list[currentPosition]
-                    if (item.likeActionPerforming) {
-                        context.toast(R.string.like_in_progress)
-                    } else {
-                        adapter.likeBtnClickListener?.onLikeBtnClicked(item, currentPosition)
-                    }
-                }
-            }
-
-            dislikeBtn.setOnClickListener {
-                val currentPosition = adapterPosition
-                if (currentPosition != RecyclerView.NO_POSITION) {
-                    val item = adapter.list[currentPosition]
-                    if (item.dislikeActionPerforming) {
-                        context.toast(R.string.dislike_in_progress)
-                    } else {
-                        adapter.dislikeBtnClickListener?.onDislikeBtnClicked(item, currentPosition)
-                    }
-                }
-            }
-
-            viewsBtn.setOnClickListener {
-                val currentPosition = adapterPosition
-                if (currentPosition != RecyclerView.NO_POSITION) {
-                    val item = adapter.list[currentPosition]
-                    adapter.viewsBtnClickListener?.onViewsBtnClicked(item, currentPosition)
-                }
-            }
-        }
-    }
+//    init {
+//        with(itemView) {
+//            likeBtn.setOnClickListener {
+//                val currentPosition = adapterPosition
+//                if (currentPosition != RecyclerView.NO_POSITION) {
+//                    val item = adapter.list[currentPosition]
+//                    if (item.likeActionPerforming) {
+//                        context.toast(R.string.like_in_progress)
+//                    } else {
+//                        adapter.likeBtnClickListener?.onLikeBtnClicked(item, currentPosition)
+//                    }
+//                }
+//            }
+//
+//            dislikeBtn.setOnClickListener {
+//                val currentPosition = adapterPosition
+//                if (currentPosition != RecyclerView.NO_POSITION) {
+//                    val item = adapter.list[currentPosition]
+//                    if (item.dislikeActionPerforming) {
+//                        context.toast(R.string.dislike_in_progress)
+//                    } else {
+//                        adapter.dislikeBtnClickListener?.onDislikeBtnClicked(item, currentPosition)
+//                    }
+//                }
+//            }
+//
+//            viewsBtn.setOnClickListener {
+//                val currentPosition = adapterPosition
+//                if (currentPosition != RecyclerView.NO_POSITION) {
+//                    val item = adapter.list[currentPosition]
+//                    adapter.viewsBtnClickListener?.onViewsBtnClicked(item, currentPosition)
+//                }
+//            }
+//        }
+//    }
 
     fun bind(post: PostModel) {
         with(itemView) {
 
             authorTv.text = post.author.username
             badgeTv.text = post.badge
-            createdTv.text = post.dtCreation.toString()
+            createdTv.text = howLongAgo(post.dtCreation)
             contentTv.text = post.content
             likesTv.text = post.likes.size.toString()
             dislikesTv.text = post.dislikes.size.toString()
@@ -64,7 +67,7 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
             if (post.author.avatar != null) {
                 loadImage(avatarImg, post.author.avatar!!.url)
             } else {
-                TODO()
+                avatarImg.setImageResource(R.drawable.ic_avatar_48dp)
             }
 
             if (post.attachment != null) {
@@ -84,33 +87,33 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                 openLinkBtn.visibility = View.INVISIBLE
             }
 
-            when {
-                post.likeActionPerforming -> {
-                    likeBtn.setImageResource(R.drawable.ic_thumb_up_pending_24dp)
-                }
-                post.likes.contains(post.author.id) -> {
-                    likeBtn.setImageResource(R.drawable.ic_thumb_up_active_24dp)
-                    likesTv.setTextColor(ContextCompat.getColor(context, R.color.colorGreen))
-                }
-                else -> {
-                    likeBtn.setImageResource(R.drawable.ic_thumb_up_inactive_24dp)
-                    likesTv.setTextColor(ContextCompat.getColor(context, R.color.colorGrey))
-                }
-            }
-
-            when {
-                post.dislikeActionPerforming -> {
-                    dislikeBtn.setImageResource(R.drawable.ic_thumb_down_pending_24dp)
-                }
-                post.dislikes.contains(post.author.id) -> {
-                    dislikeBtn.setImageResource(R.drawable.ic_thumb_down_active_24dp)
-                    dislikesTv.setTextColor(ContextCompat.getColor(context, R.color.colorRed))
-                }
-                else -> {
-                    dislikeBtn.setImageResource(R.drawable.ic_thumb_down_inactive_24dp)
-                    dislikesTv.setTextColor(ContextCompat.getColor(context, R.color.colorGrey))
-                }
-            }
+//            when {
+//                post.likeActionPerforming -> {
+//                    likeBtn.setImageResource(R.drawable.ic_thumb_up_pending_24dp)
+//                }
+//                post.likes.contains(post.author.id) -> {
+//                    likeBtn.setImageResource(R.drawable.ic_thumb_up_active_24dp)
+//                    likesTv.setTextColor(ContextCompat.getColor(context, R.color.colorGreen))
+//                }
+//                else -> {
+//                    likeBtn.setImageResource(R.drawable.ic_thumb_up_inactive_24dp)
+//                    likesTv.setTextColor(ContextCompat.getColor(context, R.color.colorGrey))
+//                }
+//            }
+//
+//            when {
+//                post.dislikeActionPerforming -> {
+//                    dislikeBtn.setImageResource(R.drawable.ic_thumb_down_pending_24dp)
+//                }
+//                post.dislikes.contains(post.author.id) -> {
+//                    dislikeBtn.setImageResource(R.drawable.ic_thumb_down_active_24dp)
+//                    dislikesTv.setTextColor(ContextCompat.getColor(context, R.color.colorRed))
+//                }
+//                else -> {
+//                    dislikeBtn.setImageResource(R.drawable.ic_thumb_down_inactive_24dp)
+//                    dislikesTv.setTextColor(ContextCompat.getColor(context, R.color.colorGrey))
+//                }
+//            }
 
             viewsBtn.setOnClickListener {
                 TODO()

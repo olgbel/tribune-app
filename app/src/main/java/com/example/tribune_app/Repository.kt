@@ -91,4 +91,5 @@ object Repository {
 
     suspend fun getCurrentUser() = API.getCurrentUser()
 
+    suspend fun getReactionsById(postId: Long) = API.getReactionsById(postId)
 }

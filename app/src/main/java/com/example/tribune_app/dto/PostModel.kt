@@ -17,9 +17,9 @@ data class PostModel(
     var badge: String,
     val dtCreation: Int,
     val content: String,
-    var likes: Set<Reaction>,
+    var likes: Set<ReactionModel>,
     var isLikedByMe: Boolean,
-    var dislikes: Set<Reaction>,
+    var dislikes: Set<ReactionModel>,
     var isDislikedByMe: Boolean,
     var views: Int,
     val linkURL: String? = null,
@@ -32,14 +32,14 @@ data class PostModel(
         if (id != updatedModel.id) throw IllegalAccessException("Ids are different")
         likes = updatedModel.likes
 
-        if (updatedModel.likes.filter { it.userId == author.id }.isNotEmpty()){
+        if (updatedModel.likes.filter { it.user.id == author.id }.isNotEmpty()){
             isLikedByMe = true
         }
     }
     fun updateDislikes(updatedModel: PostModel) {
         if (id != updatedModel.id) throw IllegalAccessException("Ids are different")
         dislikes = updatedModel.dislikes
-        if (updatedModel.dislikes.filter { it.userId == author.id }.isNotEmpty()){
+        if (updatedModel.dislikes.filter { it.user.id == author.id }.isNotEmpty()){
             isDislikedByMe = true
         }
     }

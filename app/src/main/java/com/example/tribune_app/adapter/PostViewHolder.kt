@@ -12,7 +12,6 @@ import com.example.tribune_app.CreatePostActivity
 import com.example.tribune_app.R
 import com.example.tribune_app.VotedPostActivity
 import com.example.tribune_app.dto.PostModel
-import com.example.tribune_app.dto.Reaction
 import com.example.tribune_app.utils.howLongAgo
 import com.example.tribune_app.utils.loadImage
 import kotlinx.android.synthetic.main.item_post.view.*
@@ -50,12 +49,11 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
 
             viewsBtn.setOnClickListener {
                 val currentPosition = adapterPosition
-                val item = adapter.list[currentPosition]
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    val item = adapter.list[currentPosition]
 
-                val intent = Intent(context, VotedPostActivity::class.java)
-                intent.putExtra("postId", item.id)
-
-                (context as Activity).startActivity(intent)
+                    adapter.viewsBtnClickListener?.onViewsBtnClicked(item)
+                }
             }
         }
     }

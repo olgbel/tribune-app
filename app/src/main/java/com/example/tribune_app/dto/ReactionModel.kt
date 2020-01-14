@@ -4,8 +4,8 @@ enum class ReactionType {
     LIKE, DISLIKE
 }
 
-data class Reaction (
-    val userId: Long,
+data class ReactionModel (
+    val user: UserModel,
     val date: Long,
     val type: ReactionType
 )

@@ -1,5 +1,6 @@
 package com.example.tribune_app
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tribune_app.adapter.PostAdapter
 import com.example.tribune_app.dto.PostModel
-import com.example.tribune_app.dto.Reaction
+import com.example.tribune_app.dto.ReactionModel
 import kotlinx.android.synthetic.main.activity_feed.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -118,10 +119,13 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         }
     }
 
-    override fun onViewsBtnClicked(item: PostModel, position: Int) {
-        TODO()
+    override fun onViewsBtnClicked(item: PostModel) {
+        val intent = Intent(this, VotedPostActivity::class.java)
+        intent.putExtra("postId", item.id)
+
+        startActivity(intent)
     }
 
-    private fun isReactedByMe(userId: Long, reactionSet: Set<Reaction>) =
-        reactionSet.any { it.userId == userId }
+    private fun isReactedByMe(userId: Long, reactionSet: Set<ReactionModel>) =
+        reactionSet.any { it.user.id == userId }
 }

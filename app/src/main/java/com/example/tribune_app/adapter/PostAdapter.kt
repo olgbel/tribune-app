@@ -35,6 +35,6 @@ class PostAdapter (
     }
 
     interface OnViewsBtnClickListener {
-        fun onViewsBtnClicked(item: PostModel, position: Int)
+        fun onViewsBtnClicked(item: PostModel)
     }
 }

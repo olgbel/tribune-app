@@ -45,4 +45,7 @@ interface API {
 
     @GET("api/v1/me")
     suspend fun getCurrentUser(): Response<UserModel>
+
+    @GET("api/v1/posts/reactions/{id}")
+    suspend fun getReactionsById(@Path("id") id: Long): Response<List<ReactionModel>>
 }

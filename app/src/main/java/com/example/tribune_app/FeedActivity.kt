@@ -56,11 +56,35 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     }
 
     override fun onLikeBtnClicked(item: PostModel, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        launch {
+            item.likeActionPerforming = true
+            with(container) {
+                adapter?.notifyItemChanged(position)
+
+                val response = Repository.likedByMe(item.id)
+                item.likeActionPerforming = false
+                if (response.isSuccessful) {
+                    item.updateLikes(requireNotNull(response.body()))
+                }
+                adapter?.notifyItemChanged(position)
+            }
+        }
     }
 
     override fun onDislikeBtnClicked(item: PostModel, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        launch {
+            item.dislikeActionPerforming = true
+            with(container) {
+                adapter?.notifyItemChanged(position)
+
+                val response = Repository.dislikedByMe(item.id)
+                item.dislikeActionPerforming = false
+                if (response.isSuccessful) {
+                    item.updateDislikes(requireNotNull(response.body()))
+                }
+                adapter?.notifyItemChanged(position)
+            }
+        }
     }
 
     override fun onViewsBtnClicked(item: PostModel, position: Int) {

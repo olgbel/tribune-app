@@ -66,7 +66,7 @@ object Repository {
 
     suspend fun likedByMe(id: Long) = API.likedByMe(id)
 
-    suspend fun dislikeByMe(id: Long) = API.dislikeByMe(id)
+    suspend fun dislikedByMe(id: Long) = API.dislikeByMe(id)
 
     suspend fun upload(bitmap: Bitmap): Response<AttachmentModel> {
         val bos = ByteArrayOutputStream()

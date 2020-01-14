@@ -25,6 +25,15 @@ data class PostModel(
 ) {
     var likeActionPerforming = false
     var dislikeActionPerforming = false
+
+    fun updateLikes(updatedModel: PostModel) {
+        if (id != updatedModel.id) throw IllegalAccessException("Ids are different")
+        likes = updatedModel.likes
+    }
+    fun updateDislikes(updatedModel: PostModel) {
+        if (id != updatedModel.id) throw IllegalAccessException("Ids are different")
+        dislikes = updatedModel.dislikes
+    }
 }
 
 

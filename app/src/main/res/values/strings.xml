@@ -17,5 +17,5 @@
     <string name="like_in_progress">Like is performing</string>
     <string name="dislike_in_progress">Dislike is performing</string>
     <string name="open_link_in_progress">Open link is performing</string>
-
+    <string name="already_voted">You can vote only once!</string>
 </resources>

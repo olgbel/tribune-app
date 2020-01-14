@@ -6,6 +6,7 @@ import com.example.tribune_app.api.AuthRequestParams
 import com.example.tribune_app.api.RegistrationRequestParams
 import com.example.tribune_app.api.interceptor.InjectAuthTokenInterceptor
 import com.example.tribune_app.dto.AttachmentModel
+import com.example.tribune_app.dto.CreatePostRequest
 import com.example.tribune_app.utils.BASE_URL
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -75,8 +76,17 @@ object Repository {
             RequestBody.create(MediaType.parse("image/jpeg"), bos.toByteArray())
         val body =
             MultipartBody.Part.createFormData("file", "image.jpg", reqFIle)
+        println("body: $body")
         return API.uploadImage(body)
     }
 
+    suspend fun createPost(content: String, linkURL: String?, attachment: AttachmentModel) =
+        API.createPost(
+            CreatePostRequest(
+                content = content,
+                linkURL = linkURL,
+                attachment = attachment
+            )
+        )
 
 }

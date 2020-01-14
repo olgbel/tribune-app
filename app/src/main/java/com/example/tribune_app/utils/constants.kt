@@ -9,7 +9,6 @@ const val API_SHARED_FILE = "API_shared_file"
 const val BASE_URL = //BuildConfig.SERVER_API_URL
 //"https://crud-backend2.herokuapp.com"
   "http://10.0.2.2:9999"
-//"http://localhost:9999"
 
 fun loadImage(photoImg: ImageView, url: String) {
   Glide.with(photoImg.context)

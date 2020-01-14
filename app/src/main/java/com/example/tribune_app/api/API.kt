@@ -1,6 +1,7 @@
 package com.example.tribune_app.api
 
 import com.example.tribune_app.dto.AttachmentModel
+import com.example.tribune_app.dto.CreatePostRequest
 import com.example.tribune_app.dto.PostModel
 import com.example.tribune_app.dto.PushRequestParamsDto
 import okhttp3.MultipartBody
@@ -22,6 +23,9 @@ interface API {
 
     @POST("api/v1/token")
     suspend fun registerPushToken(@Body params: PushRequestParamsDto): Response<Void>
+
+    @POST("/api/v1/posts")
+    suspend fun createPost(@Body createPostRequest: CreatePostRequest): Response<Void>
 
     @GET("api/v1/posts/recent")
     suspend fun getRecentPosts(): Response<List<PostModel>>

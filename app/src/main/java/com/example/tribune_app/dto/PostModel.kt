@@ -21,7 +21,7 @@ data class PostModel(
     var dislikes: Set<Long>,
     var views: Int,
     val linkURL: String? = null,
-    val attachment: AttachmentModel?
+    val attachment: AttachmentModel
 ) {
     var likeActionPerforming = false
     var dislikeActionPerforming = false

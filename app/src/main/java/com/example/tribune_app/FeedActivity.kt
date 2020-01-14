@@ -22,6 +22,10 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
+
+        addPostBtn.setOnClickListener {
+            startActivity(Intent(this, CreatePostActivity::class.java))
+        }
     }
 
     override fun onStart() {

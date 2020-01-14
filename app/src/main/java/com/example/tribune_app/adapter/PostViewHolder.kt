@@ -50,13 +50,9 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                 }
             }
 
-//            viewsBtn.setOnClickListener {
-//                val currentPosition = adapterPosition
-//                if (currentPosition != RecyclerView.NO_POSITION) {
-//                    val item = adapter.list[currentPosition]
-//                    adapter.viewsBtnClickListener?.onViewsBtnClicked(item, currentPosition)
-//                }
-//            }
+            viewsBtn.setOnClickListener {
+                TODO()
+            }
         }
     }
 
@@ -76,11 +72,9 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                 avatarImg.setImageResource(R.drawable.ic_avatar_48dp)
             }
 
-            if (post.attachment != null) {
-                loadImage(photoImg, post.attachment.url)
-            }
+            loadImage(photoImg, post.attachment.url)
 
-            if (post.linkURL != null) {
+            if (!post.linkURL.isNullOrEmpty()) {
                 openLinkBtn.visibility = View.VISIBLE
 
                 openLinkBtn.setOnClickListener {

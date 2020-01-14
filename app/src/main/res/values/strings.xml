@@ -18,4 +18,10 @@
     <string name="dislike_in_progress">Dislike is performing</string>
     <string name="open_link_in_progress">Open link is performing</string>
     <string name="already_voted">You can vote only once!</string>
+    <string name="create">Create</string>
+    <string name="enter_your_post_content">Enter post content</string>
+    <string name="create_new_post">Create new post</string>
+    <string name="add_link_to_post_content">Add a link to your post</string>
+    <string name="post_created_successfully">Post created successfully</string>
+    <string name="empty_attachment">Please attach the image</string>
 </resources>

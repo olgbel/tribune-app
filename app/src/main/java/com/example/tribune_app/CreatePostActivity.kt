@@ -34,9 +34,10 @@ class CreatePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 try {
                     if (attachmentModel == null) {
                         toast(R.string.empty_attachment)
-                    } else if (contentEdt.text == null) {
+                    } else if (contentEdt.text.isNullOrEmpty()) {
                         toast(R.string.empty_content)
-                    } else {
+                    }
+                    else {
                         val result = Repository.createPost(
                             contentEdt.text.toString(),
                             linkURLEdt.text.toString(),

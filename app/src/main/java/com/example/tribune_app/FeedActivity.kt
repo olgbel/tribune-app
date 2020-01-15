@@ -16,7 +16,7 @@ import org.jetbrains.anko.toast
 
 class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     PostAdapter.OnLikeBtnClickListener, PostAdapter.OnDislikeBtnClickListener,
-    PostAdapter.OnViewsBtnClickListener {
+    PostAdapter.OnViewsBtnClickListener, PostAdapter.OnAvatarClickListener {
 
     private var dialog: ProgressDialog? = null
 
@@ -52,6 +52,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                         likeBtnClickListener = this@FeedActivity
                         dislikeBtnClickListener = this@FeedActivity
                         viewsBtnClickListener = this@FeedActivity
+                        avatarClickListener = this@FeedActivity
                     }
                 }
             } else {
@@ -123,6 +124,26 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         intent.putExtra("postId", item.id)
 
         startActivity(intent)
+    }
+
+    override fun onAvatarClicked(item: PostModel, position: Int) {
+        launch {
+            with(containerFeed) {
+                val response = Repository.getPostsByUserId(item.author.id)
+                if (response.isSuccessful) {
+                    layoutManager = LinearLayoutManager(this@FeedActivity)
+                    adapter = PostAdapter(
+                        this@FeedActivity,
+                        requireNotNull(response.body()).toMutableList()
+                    ).apply {
+                        likeBtnClickListener = this@FeedActivity
+                        dislikeBtnClickListener = this@FeedActivity
+                        viewsBtnClickListener = this@FeedActivity
+                        avatarClickListener = this@FeedActivity
+                    }
+                }
+            }
+        }
     }
 
     private fun isReactedByMe(userId: Long, reactionSet: Set<ReactionModel>) =

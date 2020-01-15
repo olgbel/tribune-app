@@ -55,6 +55,15 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                     adapter.viewsBtnClickListener?.onViewsBtnClicked(item)
                 }
             }
+
+            avatarImg.setOnClickListener {
+                val currentPosition = adapterPosition
+                if (currentPosition != RecyclerView.NO_POSITION){
+                    val item = adapter.list[currentPosition]
+
+                    adapter.avatarClickListener?.onAvatarClicked(item, currentPosition)
+                }
+            }
         }
     }
 

@@ -25,6 +25,7 @@ class PostAdapter (
     var likeBtnClickListener: OnLikeBtnClickListener? = null
     var dislikeBtnClickListener: OnDislikeBtnClickListener? = null
     var viewsBtnClickListener: OnViewsBtnClickListener? = null
+    var avatarClickListener: OnAvatarClickListener? = null
 
     interface OnLikeBtnClickListener {
         fun onLikeBtnClicked(item: PostModel, position: Int)
@@ -36,5 +37,9 @@ class PostAdapter (
 
     interface OnViewsBtnClickListener {
         fun onViewsBtnClicked(item: PostModel)
+    }
+
+    interface OnAvatarClickListener {
+        fun onAvatarClicked(item: PostModel, position: Int)
     }
 }

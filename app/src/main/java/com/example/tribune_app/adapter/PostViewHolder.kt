@@ -1,20 +1,15 @@
 package com.example.tribune_app.adapter
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.transition.Visibility
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tribune_app.CreatePostActivity
 import com.example.tribune_app.R
-import com.example.tribune_app.VotedPostActivity
 import com.example.tribune_app.dto.PostModel
 import com.example.tribune_app.utils.howLongAgo
 import com.example.tribune_app.utils.loadImage
-import kotlinx.android.synthetic.main.item_post.view.*
 import kotlinx.android.synthetic.main.main_info_post.view.*
 import kotlinx.android.synthetic.main.reaction_buttons_footer.view.*
 import org.jetbrains.anko.toast
@@ -76,6 +71,7 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
             likesTv.text = post.likes.size.toString()
             dislikesTv.text = post.dislikes.size.toString()
 
+            println("post.author: ${post.author}")
             if (post.author.avatar != null) {
                 loadImage(avatarImg, post.author.avatar!!.url)
             } else {
@@ -96,6 +92,8 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
             } else {
                 openLinkBtn.visibility = View.INVISIBLE
             }
+
+
 
             when {
                 post.likeActionPerforming -> {

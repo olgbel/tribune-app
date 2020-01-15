@@ -7,6 +7,7 @@ import com.example.tribune_app.api.RegistrationRequestParams
 import com.example.tribune_app.api.interceptor.InjectAuthTokenInterceptor
 import com.example.tribune_app.dto.AttachmentModel
 import com.example.tribune_app.dto.CreatePostRequest
+import com.example.tribune_app.dto.UpdateUserRequest
 import com.example.tribune_app.utils.BASE_URL
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -94,4 +95,8 @@ object Repository {
     suspend fun getReactionsById(postId: Long) = API.getReactionsById(postId)
 
     suspend fun getPostsByUserId(userId: Long) = API.getPostsByUserId(userId)
+
+    suspend fun updateUser(userId: Long, attachment: AttachmentModel) = API.updateUser(
+        UpdateUserRequest(userId = userId, attachment = attachment)
+    )
 }

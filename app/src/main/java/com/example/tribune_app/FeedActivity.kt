@@ -28,11 +28,16 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         addPostBtn.setOnClickListener {
             startActivity(Intent(this, CreatePostActivity::class.java))
         }
+
+        avatarEditBtn.setOnClickListener {
+            startActivity(Intent(this, ProfilePostActivity::class.java))
+        }
     }
 
     override fun onStart() {
         super.onStart()
         launch {
+            println("start on feed")
             dialog = ProgressDialog(this@FeedActivity).apply {
                 setMessage(this@FeedActivity.getString(R.string.please_wait))
                 setTitle(R.string.downloading_posts)
@@ -44,11 +49,13 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
             val userId = intent.getLongExtra("userId", 0L)
 
             result = if (userId != 0L){
+                println("by userId")
                 Repository.getPostsByUserId(userId)
             } else {
+                println("recent posts")
                 Repository.getRecentPosts()
             }
-
+            println("result: ${result.body()}")
             dialog?.dismiss()
             if (result.isSuccessful) {
                 with(containerFeed) {

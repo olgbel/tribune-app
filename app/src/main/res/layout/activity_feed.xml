@@ -6,6 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".FeedActivity">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/avatarEditBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_edit_white_24dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/containerFeed"
         app:layout_constraintStart_toStartOf="parent"

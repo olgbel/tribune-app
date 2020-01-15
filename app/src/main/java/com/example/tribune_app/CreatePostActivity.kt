@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tribune_app.dto.AttachmentModel
+import com.example.tribune_app.utils.REQUEST_IMAGE_CAPTURE
 import kotlinx.android.synthetic.main.activity_create_post.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -17,7 +18,6 @@ import java.io.IOException
 
 class CreatePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private var dialog: ProgressDialog? = null
-    val REQUEST_IMAGE_CAPTURE = 1
     private var attachmentModel: AttachmentModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

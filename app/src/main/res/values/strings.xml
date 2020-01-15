@@ -26,4 +26,7 @@
     <string name="empty_attachment">Please attach the image</string>
     <string name="empty_content">Please add text to your post</string>
     <string name="dowloading_voted_list">Downloading voted list</string>
+    <string name="profile">Profile information</string>
+    <string name="update">UPDATE</string>
+    <string name="user_info_updated">avatar updated</string>
 </resources>

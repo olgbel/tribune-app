@@ -51,4 +51,7 @@ interface API {
 
     @GET("api/v1/posts/user/{id}")
     suspend fun getPostsByUserId(@Path("id") userId: Long): Response<List<PostModel>>
+
+    @PUT("api/v1/update/user")
+    suspend fun updateUser(@Body updateUserRequest: UpdateUserRequest): Response<Void>
 }

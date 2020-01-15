@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
+import retrofit2.Response
 
 class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     PostAdapter.OnLikeBtnClickListener, PostAdapter.OnDislikeBtnClickListener,
@@ -39,7 +40,14 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 setProgressBarIndeterminate(true)
                 show()
             }
-            val result = Repository.getRecentPosts()
+            val result: Response<List<PostModel>>
+            val userId = intent.getLongExtra("userId", 0L)
+
+            result = if (userId != 0L){
+                Repository.getPostsByUserId(userId)
+            } else {
+                Repository.getRecentPosts()
+            }
 
             dialog?.dismiss()
             if (result.isSuccessful) {
@@ -127,22 +135,11 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     }
 
     override fun onAvatarClicked(item: PostModel, position: Int) {
+
         launch {
-            with(containerFeed) {
-                val response = Repository.getPostsByUserId(item.author.id)
-                if (response.isSuccessful) {
-                    layoutManager = LinearLayoutManager(this@FeedActivity)
-                    adapter = PostAdapter(
-                        this@FeedActivity,
-                        requireNotNull(response.body()).toMutableList()
-                    ).apply {
-                        likeBtnClickListener = this@FeedActivity
-                        dislikeBtnClickListener = this@FeedActivity
-                        viewsBtnClickListener = this@FeedActivity
-                        avatarClickListener = this@FeedActivity
-                    }
-                }
-            }
+            val intent = Intent(this@FeedActivity, FeedActivity::class.java)
+            intent.putExtra("userId", item.author.id)
+            startActivity(intent)
         }
     }
 

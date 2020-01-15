@@ -15,8 +15,19 @@ import java.util.*
 
 class ReactionViewHolder(val adapter: ReactionAdapter, view: View) : RecyclerView.ViewHolder(view) {
 
+    init {
+        itemView.setOnClickListener {
+            val currentPosition = adapterPosition
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                val item = adapter.items[currentPosition]
+
+                adapter.voitedItemClickListener?.onVoitedItemClicked(item, currentPosition)
+            }
+        }
+    }
     fun bind(reaction: ReactionModel) {
         with(itemView) {
+
             when (reaction.type) {
                 ReactionType.LIKE -> {
                     reactionIv.setImageResource(R.drawable.ic_thumb_up_active_24dp)
@@ -40,7 +51,6 @@ class ReactionViewHolder(val adapter: ReactionAdapter, view: View) : RecyclerVie
             } else {
                 avatarIv.setImageResource(R.drawable.ic_avatar_48dp)
             }
-
         }
 
     }

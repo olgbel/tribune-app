@@ -1,17 +1,20 @@
 package com.example.tribune_app
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tribune_app.adapter.ReactionAdapter
+import com.example.tribune_app.dto.ReactionModel
 import kotlinx.android.synthetic.main.activity_voted.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
 
-class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope(),
+    ReactionAdapter.OnVoitedItemClickListener {
 
     private var dialog: ProgressDialog? = null
 
@@ -38,7 +41,9 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     layoutManager = LinearLayoutManager(this@VotedPostActivity)
                     adapter = ReactionAdapter(
                         requireNotNull(result.body()).toMutableList()
-                    )
+                    ).apply {
+                        voitedItemClickListener = this@VotedPostActivity
+                    }
                 }
             } else {
                 toast(R.string.error_occured)
@@ -46,4 +51,13 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
 
     }
+
+    override fun onVoitedItemClicked(item: ReactionModel, position: Int) {
+        launch {
+            val intent = Intent(this@VotedPostActivity, FeedActivity::class.java)
+            intent.putExtra("userId", item.user.id)
+            startActivity(intent)
+        }
+    }
+
 }

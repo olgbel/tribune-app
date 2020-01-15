@@ -1,12 +1,11 @@
 package com.example.tribune_app.utils
 
-fun howLongAgo(seconds: Int) : String{
+fun howLongAgo(seconds: Int): String {
 
     val minutes: Double = seconds.toDouble() / 60
-    if (seconds / 60 == 0){
+    if (seconds / 60 == 0) {
         return "менее минуты назад"
-    }
-    else if (minutes < 60){
+    } else if (minutes < 60) {
         return "$minutes ${getSuffixForMinutes(minutes)} назад"
     }
 
@@ -22,16 +21,17 @@ fun howLongAgo(seconds: Int) : String{
     }
 }
 
-fun getSuffixForMinutes(minutes: Double) : String {
+fun getSuffixForMinutes(minutes: Double): String {
 
-    return when (minutes.toInt()){
+    return when (minutes.toInt()) {
         1, 21, 31, 41, 51 -> "минуту"
         2, 3, 4, 22, 23, 24, 32, 33, 34, 42, 43, 44, 52, 53, 54 -> "минуты"
         else -> "минут"
-    }}
+    }
+}
 
-fun getSuffixForHours(hours: Double): String{
-    return when (hours.toInt()){
+fun getSuffixForHours(hours: Double): String {
+    return when (hours.toInt()) {
         21 -> "час"
         2, 3, 4, 22, 23 -> "часа"
         else -> "часов"

@@ -5,12 +5,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tribune_app.R
 import com.example.tribune_app.dto.ReactionModel
 import com.example.tribune_app.dto.ReactionType
-import com.example.tribune_app.utils.howLongAgo
 import com.example.tribune_app.utils.loadImage
 import kotlinx.android.synthetic.main.voted_item.view.*
 import kotlinx.android.synthetic.main.voted_item.view.authorTv
 import kotlinx.android.synthetic.main.voted_item.view.badgeTv
 import kotlinx.android.synthetic.main.voted_item.view.createdTv
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ReactionViewHolder(val adapter: ReactionAdapter, view: View) : RecyclerView.ViewHolder(view) {
 
@@ -27,7 +28,12 @@ class ReactionViewHolder(val adapter: ReactionAdapter, view: View) : RecyclerVie
 
             authorTv.text = reaction.user.username
             badgeTv.text = reaction.user.badge
-            createdTv.text = howLongAgo(reaction.date.toInt())
+
+            val dateFormatted = SimpleDateFormat(
+                "dd MMM",
+                Locale.US
+            ).format(Date(reaction.date))
+            createdTv.text = dateFormatted
 
             if (reaction.user.avatar != null) {
                 loadImage(avatarIv, reaction.user.avatar!!.url)

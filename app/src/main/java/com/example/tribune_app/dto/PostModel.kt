@@ -14,7 +14,6 @@ data class AttachmentModel(val id: String, val type: AttachmentType) {
 data class PostModel(
     val id: Long,
     val author: UserModel,
-    var badge: String,
     val dtCreation: Int,
     val content: String,
     var likes: Set<ReactionModel>,

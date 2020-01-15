@@ -4,9 +4,8 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.tribune_app.adapter.PostAdapter
 import com.example.tribune_app.adapter.ReactionAdapter
-import kotlinx.android.synthetic.main.activity_feed.*
+import kotlinx.android.synthetic.main.activity_voted.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -26,20 +25,18 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         launch {
             dialog = ProgressDialog(this@VotedPostActivity).apply {
                 setMessage(this@VotedPostActivity.getString(R.string.please_wait))
-                setTitle(R.string.downloading_posts)
+                setTitle(R.string.dowloading_voted_list)
                 setCancelable(false)
                 setProgressBarIndeterminate(true)
                 show()
             }
             val postId = intent.getLongExtra("postId", 0L)
             val result = Repository.getReactionsById(postId)
-
             dialog?.dismiss()
             if (result.isSuccessful) {
-                with(container) {
+                with(containerVoted) {
                     layoutManager = LinearLayoutManager(this@VotedPostActivity)
                     adapter = ReactionAdapter(
-                        this@VotedPostActivity,
                         requireNotNull(result.body()).toMutableList()
                     )
                 }

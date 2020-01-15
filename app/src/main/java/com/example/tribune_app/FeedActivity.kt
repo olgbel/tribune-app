@@ -1,6 +1,5 @@
 package com.example.tribune_app
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -44,7 +43,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
 
             dialog?.dismiss()
             if (result.isSuccessful) {
-                with(container) {
+                with(containerFeed) {
                     layoutManager = LinearLayoutManager(this@FeedActivity)
                     adapter = PostAdapter(
                         this@FeedActivity,
@@ -64,7 +63,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     override fun onLikeBtnClicked(item: PostModel, position: Int) {
         launch {
             item.likeActionPerforming = true
-            with(container) {
+            with(containerFeed) {
                 val userResponse = Repository.getCurrentUser()
                 if (userResponse.isSuccessful) {
                     if (isReactedByMe(
@@ -93,7 +92,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     override fun onDislikeBtnClicked(item: PostModel, position: Int) {
         launch {
             item.dislikeActionPerforming = true
-            with(container) {
+            with(containerFeed) {
                 val userResponse = Repository.getCurrentUser()
                 if (userResponse.isSuccessful) {
                     if (isReactedByMe(

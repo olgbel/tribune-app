@@ -60,9 +60,8 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
 
     fun bind(post: PostModel) {
         with(itemView) {
-
             authorTv.text = post.author.username
-            badgeTv.text = post.badge
+            badgeTv.text = post.author.badge
             createdTv.text = howLongAgo(post.dtCreation)
             contentTv.text = post.content
             likesTv.text = post.likes.size.toString()
@@ -116,11 +115,6 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
                     dislikesTv.setTextColor(ContextCompat.getColor(context, R.color.colorGrey))
                 }
             }
-
-            viewsBtn.setOnClickListener {
-                TODO()
-            }
-
         }
     }
 

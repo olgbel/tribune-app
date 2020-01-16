@@ -96,7 +96,7 @@ object Repository {
 
     suspend fun getPostsByUserId(userId: Long) = API.getPostsByUserId(userId)
 
-    suspend fun updateUser(userId: Long, attachment: AttachmentModel) = API.updateUser(
-        UpdateUserRequest(userId = userId, attachment = attachment)
+    suspend fun updateUser(userId: Long, avatar: AttachmentModel) = API.updateUser(
+        UpdateUserRequest(userId = userId, avatar = avatar)
     )
 }

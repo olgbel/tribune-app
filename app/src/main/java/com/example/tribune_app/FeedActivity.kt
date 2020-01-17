@@ -32,6 +32,10 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         avatarEditBtn.setOnClickListener {
             startActivity(Intent(this, ProfilePostActivity::class.java))
         }
+
+        swipeContainerFeed.setOnRefreshListener {
+            refreshData()
+        }
     }
 
     override fun onStart() {
@@ -167,4 +171,17 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
 
     private fun isReactedByMe(userId: Long, reactionSet: Set<ReactionModel>) =
         reactionSet.any { it.user.id == userId }
+
+    private fun refreshData() {
+        launch {
+            val response = Repository.getRecentPosts()
+            swipeContainerFeed.isRefreshing = false
+            if (response.isSuccessful) {
+                val newItems = response.body() ?: mutableListOf()
+                (containerFeed.adapter as PostAdapter).list.clear()
+                (containerFeed.adapter as PostAdapter).list.addAll(0, newItems)
+                (containerFeed.adapter as PostAdapter).notifyDataSetChanged()
+            }
+        }
+    }
 }

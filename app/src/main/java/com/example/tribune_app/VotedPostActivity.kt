@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tribune_app.adapter.PostAdapter
 import com.example.tribune_app.adapter.ReactionAdapter
 import com.example.tribune_app.dto.ReactionModel
+import kotlinx.android.synthetic.main.activity_feed.*
 import kotlinx.android.synthetic.main.activity_voted.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -21,6 +23,10 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_voted)
+
+        swipeContainerVoited.setOnRefreshListener {
+            refreshData()
+        }
     }
 
     override fun onStart() {
@@ -57,6 +63,21 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope(),
             val intent = Intent(this@VotedPostActivity, FeedActivity::class.java)
             intent.putExtra("userId", item.user.id)
             startActivity(intent)
+        }
+    }
+
+    private fun refreshData() {
+        launch {
+            val postId = intent.getLongExtra("postId", 0L)
+            val response = Repository.getReactionsById(postId)
+
+            swipeContainerVoited.isRefreshing = false
+            if (response.isSuccessful) {
+                val newItems = response.body() ?: mutableListOf()
+                (containerVoted.adapter as ReactionAdapter).items.clear()
+                (containerVoted.adapter as ReactionAdapter).items.addAll(0, newItems)
+                (containerVoted.adapter as ReactionAdapter).notifyDataSetChanged()
+            }
         }
     }
 

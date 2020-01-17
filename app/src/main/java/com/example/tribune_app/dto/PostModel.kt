@@ -31,16 +31,19 @@ data class PostModel(
         if (id != updatedModel.id) throw IllegalAccessException("Ids are different")
         likes = updatedModel.likes
 
-        if (updatedModel.likes.filter { it.user.id == author.id }.isNotEmpty()){
+        if (updatedModel.likes.filter { it.user.id == author.id }.isNotEmpty()) {
             isLikedByMe = true
         }
+        author.isReadOnly = updatedModel.author.isReadOnly
     }
+
     fun updateDislikes(updatedModel: PostModel) {
         if (id != updatedModel.id) throw IllegalAccessException("Ids are different")
         dislikes = updatedModel.dislikes
-        if (updatedModel.dislikes.filter { it.user.id == author.id }.isNotEmpty()){
+        if (updatedModel.dislikes.filter { it.user.id == author.id }.isNotEmpty()) {
             isDislikedByMe = true
         }
+        author.isReadOnly = updatedModel.author.isReadOnly
     }
 }
 

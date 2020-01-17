@@ -37,7 +37,6 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     override fun onStart() {
         super.onStart()
         launch {
-            println("start on feed")
             dialog = ProgressDialog(this@FeedActivity).apply {
                 setMessage(this@FeedActivity.getString(R.string.please_wait))
                 setTitle(R.string.downloading_posts)
@@ -45,17 +44,22 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 setProgressBarIndeterminate(true)
                 show()
             }
+
+            val currentUser = Repository.getCurrentUser()
+            if (currentUser.isSuccessful && currentUser.body()?.isReadOnly!!) {
+                addPostBtn.hide()
+            } else {
+                addPostBtn.show()
+            }
+
             val result: Response<List<PostModel>>
             val userId = intent.getLongExtra("userId", 0L)
 
-            result = if (userId != 0L){
-                println("by userId")
+            result = if (userId != 0L) {
                 Repository.getPostsByUserId(userId)
             } else {
-                println("recent posts")
                 Repository.getRecentPosts()
             }
-            println("result: ${result.body()}")
             dialog?.dismiss()
             if (result.isSuccessful) {
                 with(containerFeed) {
@@ -97,6 +101,12 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                             item.updateLikes(requireNotNull(response.body()))
                         }
                         adapter?.notifyItemChanged(position)
+
+                        if (item.author.isReadOnly) {
+                            addPostBtn.hide()
+                        } else {
+                            addPostBtn.show()
+                        }
                     }
                 } else {
                     toast("Error with current user request")
@@ -126,6 +136,11 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                             item.updateDislikes(requireNotNull(response.body()))
                         }
                         adapter?.notifyItemChanged(position)
+                        if (item.author.isReadOnly) {
+                            addPostBtn.hide()
+                        } else {
+                            addPostBtn.show()
+                        }
                     }
                 } else {
                     toast("Error with current user request")

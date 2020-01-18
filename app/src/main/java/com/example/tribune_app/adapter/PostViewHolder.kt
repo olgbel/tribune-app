@@ -71,7 +71,6 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
             likesTv.text = post.likes.size.toString()
             dislikesTv.text = post.dislikes.size.toString()
 
-            println("post.author: ${post.author}")
             if (post.author.avatar != null) {
                 loadImage(avatarImg, post.author.avatar!!.url)
             } else {

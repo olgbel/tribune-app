@@ -1,0 +1,1 @@
+https://tribune-app.herokuapp.com/

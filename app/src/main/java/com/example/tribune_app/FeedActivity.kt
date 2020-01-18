@@ -11,6 +11,7 @@ import com.example.tribune_app.dto.ReactionModel
 import kotlinx.android.synthetic.main.activity_feed.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
 import retrofit2.Response
@@ -35,6 +36,10 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
 
         swipeContainerFeed.setOnRefreshListener {
             refreshData()
+        }
+
+        loadMoreBtn.setOnClickListener {
+            loadMore()
         }
     }
 
@@ -183,5 +188,22 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 (containerFeed.adapter as PostAdapter).notifyDataSetChanged()
             }
         }
+    }
+
+    private fun loadMore(){
+        launch {
+            val response = Repository.getPostsAfter((containerFeed.adapter as PostAdapter).list.size.toLong())
+            swipeContainerFeed.isRefreshing = false
+            if (response.isSuccessful){
+                val newItems = response.body() ?: mutableListOf()
+                (containerFeed.adapter as PostAdapter).list.addAll((containerFeed.adapter as PostAdapter).list.size, newItems)
+                (containerFeed.adapter as PostAdapter).notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cancel()
     }
 }

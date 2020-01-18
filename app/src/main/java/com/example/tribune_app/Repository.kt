@@ -77,7 +77,6 @@ object Repository {
             RequestBody.create(MediaType.parse("image/jpeg"), bos.toByteArray())
         val body =
             MultipartBody.Part.createFormData("file", "image.jpg", reqFIle)
-        println("body: $body")
         return API.uploadImage(body)
     }
 

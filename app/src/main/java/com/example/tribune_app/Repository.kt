@@ -7,6 +7,7 @@ import com.example.tribune_app.api.RegistrationRequestParams
 import com.example.tribune_app.api.interceptor.InjectAuthTokenInterceptor
 import com.example.tribune_app.dto.AttachmentModel
 import com.example.tribune_app.dto.CreatePostRequest
+import com.example.tribune_app.dto.PushRequestParamsDto
 import com.example.tribune_app.dto.UpdateUserRequest
 import com.example.tribune_app.utils.BASE_URL
 import okhttp3.MediaType
@@ -98,4 +99,6 @@ object Repository {
     suspend fun updateUser(userId: Long, avatar: AttachmentModel) = API.updateUser(
         UpdateUserRequest(userId = userId, avatar = avatar)
     )
+
+    suspend fun registerPushToken(token: String) = API.registerPushToken(PushRequestParamsDto(token))
 }

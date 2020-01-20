@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "120269817539",
+    "firebase_url": "https://tribune-app.firebaseio.com",
+    "project_id": "tribune-app",
+    "storage_bucket": "tribune-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120269817539:android:5083cbf28abe810b268476",
+        "android_client_info": {
+          "package_name": "com.example.tribune_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120269817539-jt5h8o49c8j62asfjurjb0mlr8qre587.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-TqTYdXAfROp54iP1FB3e3uPkV-bO_lw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120269817539-jt5h8o49c8j62asfjurjb0mlr8qre587.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120269817539:android:60a6c7c192f42984268476",
+        "android_client_info": {
+          "package_name": "ru.netology.kotlin.tribuneapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120269817539-jt5h8o49c8j62asfjurjb0mlr8qre587.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-TqTYdXAfROp54iP1FB3e3uPkV-bO_lw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120269817539-jt5h8o49c8j62asfjurjb0mlr8qre587.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

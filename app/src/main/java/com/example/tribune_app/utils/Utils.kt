@@ -3,6 +3,10 @@ package com.example.tribune_app.utils
 import android.content.Context
 import com.example.tribune_app.R
 
+fun getToken(ctx: Context) =
+    ctx.getSharedPreferences(API_SHARED_FILE, Context.MODE_PRIVATE)
+        .getString(AUTHENTICATED_SHARED_KEY, null)
+
 fun howLongAgo(context: Context, seconds: Int): String {
     val minutes: Int = seconds / 60
     if (seconds / 60 == 0) {

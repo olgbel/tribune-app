@@ -13,11 +13,15 @@ import com.example.tribune_app.dto.ReactionModel
 import com.example.tribune_app.utils.howLongAgo
 import com.example.tribune_app.utils.postId
 import com.example.tribune_app.utils.userId
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_feed.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 import retrofit2.Response
 
@@ -47,6 +51,31 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         loadMoreBtn.setOnClickListener {
             loadMore()
         }
+
+        requestToken()
+    }
+
+    private fun requestToken() {
+        with(GoogleApiAvailability.getInstance()) {
+            val code = isGooglePlayServicesAvailable(this@FeedActivity)
+            if (code == ConnectionResult.SUCCESS) {
+                return@with
+            }
+            if (isUserResolvableError(code)) {
+                getErrorDialog(this@FeedActivity, code, 9000).show()
+                return
+            }
+            longToast(getString(R.string.google_play_unavailable))
+            return
+        }
+
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            launch {
+                println(it.token)
+                val response = Repository.registerPushToken(it.token)
+            }
+        }
+
     }
 
     override fun onStart() {

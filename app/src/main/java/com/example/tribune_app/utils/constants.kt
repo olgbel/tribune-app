@@ -10,7 +10,9 @@ const val API_SHARED_FILE = "API_shared_file"
 const val BASE_URL = //BuildConfig.SERVER_API_URL
 //    "https://tribune-app.herokuapp.com/"
     "http://10.0.2.2:9999"
-
+const val SIMPLE_NOTIFY_ID = 1
+const val RANDOM_NOTIFICATION = 100000
+const val UPLOAD_CHANEL_ID = "upload_chanel_id"
 const val REQUEST_IMAGE_CAPTURE = 1
 
 private const val BITMAP_KEY = "data"

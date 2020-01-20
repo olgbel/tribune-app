@@ -38,6 +38,9 @@
     <string name="year_ago">год назад</string>
     <string name="few_months">несколько месяцев назад</string>
     <string name="more_year_ago">более года назад</string>
+    <string name="notification_channel_name">react notification</string>
+    <string name="notification_channel_description">someone\'s react on your post</string>
+    <string name="google_play_unavailable">google play is unavailable</string>
 
     <plurals name="minutes_plurals">
         <item quantity="one">минуту назад</item>

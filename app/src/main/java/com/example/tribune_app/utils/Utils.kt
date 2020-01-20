@@ -4,15 +4,10 @@ import android.content.Context
 import com.example.tribune_app.R
 
 fun howLongAgo(context: Context, seconds: Int): String {
-    println("seconds: $seconds")
     val minutes: Int = seconds / 60
-    println("minutes: $minutes")
     if (seconds / 60 == 0) {
-        println("1")
-        println("${R.string.less_minute.toString()}")
-        return R.string.less_minute.toString()
+        return context.resources.getString(R.string.less_minute)
     } else if (minutes < 60) {
-        println("1")
         return "$minutes ${getSuffixForMinutes(context, minutes)}"
     }
 
@@ -20,9 +15,9 @@ fun howLongAgo(context: Context, seconds: Int): String {
     return when {
         hours < 24 -> "${hours} ${getSuffixForHours(context, hours)}"
         hours < 24 * 30 -> "${hours} ${getSuffixForDays(context, hours)}"
-        hours == 365 * 24 -> R.string.year_ago.toString()
-        hours < 365 * 24 -> R.string.few_months.toString()
-        else -> R.string.more_year_ago.toString()
+        hours == 365 * 24 -> context.resources.getString(R.string.year_ago)
+        hours < 365 * 24 -> context.resources.getString(R.string.few_months)
+        else -> context.resources.getString(R.string.more_year_ago)
     }
 }
 

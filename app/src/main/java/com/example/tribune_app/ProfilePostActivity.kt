@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tribune_app.dto.AttachmentModel
 import com.example.tribune_app.utils.REQUEST_IMAGE_CAPTURE
+import com.example.tribune_app.utils.bitmap
 import com.example.tribune_app.utils.loadImage
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.coroutines.CoroutineScope
@@ -71,7 +72,7 @@ class ProfilePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap?
+            val imageBitmap = data?.bitmap
             imageBitmap?.let {
                 launch {
                     val imageUploadResult = Repository.upload(it)

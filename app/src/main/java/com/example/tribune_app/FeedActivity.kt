@@ -1,13 +1,18 @@
 package com.example.tribune_app
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tribune_app.adapter.PostAdapter
 import com.example.tribune_app.dto.PostModel
 import com.example.tribune_app.dto.ReactionModel
+import com.example.tribune_app.utils.howLongAgo
+import com.example.tribune_app.utils.postId
+import com.example.tribune_app.utils.userId
 import kotlinx.android.synthetic.main.activity_feed.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -21,6 +26,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     PostAdapter.OnViewsBtnClickListener, PostAdapter.OnAvatarClickListener {
 
     private var dialog: ProgressDialog? = null
+    private var adapter: PostAdapter = PostAdapter(this@FeedActivity, mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +68,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
             }
 
             val result: Response<List<PostModel>>
-            val userId = intent.getLongExtra("userId", 0L)
+            val userId = intent.userId
 
             result = if (userId != 0L) {
                 Repository.getPostsByUserId(userId)
@@ -118,7 +124,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                         }
                     }
                 } else {
-                    toast("Error with current user request")
+                    toast(R.string.current_user_error)
                 }
             }
         }
@@ -152,7 +158,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                         }
                     }
                 } else {
-                    toast("Error with current user request")
+                    toast(R.string.current_user_error)
                 }
             }
         }
@@ -160,16 +166,15 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
 
     override fun onViewsBtnClicked(item: PostModel) {
         val intent = Intent(this, VotedPostActivity::class.java)
-        intent.putExtra("postId", item.id)
+        intent.postId = item.id
 
         startActivity(intent)
     }
 
     override fun onAvatarClicked(item: PostModel, position: Int) {
-
         launch {
             val intent = Intent(this@FeedActivity, FeedActivity::class.java)
-            intent.putExtra("userId", item.author.id)
+            intent.userId = item.author.id
             startActivity(intent)
         }
     }
@@ -183,21 +188,22 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
             swipeContainerFeed.isRefreshing = false
             if (response.isSuccessful) {
                 val newItems = response.body() ?: mutableListOf()
-                (containerFeed.adapter as PostAdapter).list.clear()
-                (containerFeed.adapter as PostAdapter).list.addAll(0, newItems)
-                (containerFeed.adapter as PostAdapter).notifyDataSetChanged()
+                adapter.list.clear()
+                adapter.list.addAll(0, newItems)
+                adapter.notifyDataSetChanged()
             }
         }
     }
 
-    private fun loadMore(){
+    private fun loadMore() {
         launch {
-            val response = Repository.getPostsAfter((containerFeed.adapter as PostAdapter).list.size.toLong())
+            val response =
+                Repository.getPostsAfter((containerFeed.adapter as PostAdapter).list.size.toLong())
             swipeContainerFeed.isRefreshing = false
-            if (response.isSuccessful){
+            if (response.isSuccessful) {
                 val newItems = response.body() ?: mutableListOf()
-                (containerFeed.adapter as PostAdapter).list.addAll((containerFeed.adapter as PostAdapter).list.size, newItems)
-                (containerFeed.adapter as PostAdapter).notifyDataSetChanged()
+                adapter.list.addAll((containerFeed.adapter as PostAdapter).list.size, newItems)
+                adapter.notifyDataSetChanged()
             }
         }
     }

@@ -30,4 +30,34 @@
     <string name="update">UPDATE</string>
     <string name="user_info_updated">avatar updated</string>
     <string name="load_more_posts">More posts</string>
+    <string name="upload_error">Cannot upload image</string>
+    <string name="current_user_error">Error with current user request</string>
+    <string name="author_name">author name</string>
+    <string name="badge">badge</string>
+    <string name="less_minute">менее минуты назад</string>
+    <string name="year_ago">год назад</string>
+    <string name="few_months">несколько месяцев назад</string>
+    <string name="more_year_ago">более года назад</string>
+
+    <plurals name="minutes_plurals">
+        <item quantity="one">минуту назад</item>
+        <item quantity="few">минуты назад</item>
+        <item quantity="other">минут назад</item>
+    </plurals>
+
+    <plurals name="hours_plurals">
+        <item quantity="one">час назад</item>
+        <item quantity="few">часа назад</item>
+        <item quantity="other">часов назад</item>
+    </plurals>
+
+    <plurals name="months_plurals">
+        <item quantity="one">месяц назад</item>
+        <item quantity="few">месяца назад</item>
+        <item quantity="other">месяцев назад</item>
+    </plurals>
+    <plurals name="days_plurals">
+        <item quantity="one">один день назад</item>
+        <item quantity="other">несколько дней назад</item>
+    </plurals>
 </resources>

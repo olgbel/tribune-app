@@ -66,7 +66,9 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
         with(itemView) {
             authorTv.text = post.author.username
             badgeTv.text = post.author.badge
-            createdTv.text = howLongAgo(post.dtCreation)
+            println("post.dtCreation: ${post.dtCreation}")
+            createdTv.text = howLongAgo(context, post.dtCreation)
+
             contentTv.text = post.content
             likesTv.text = post.likes.size.toString()
             dislikesTv.text = post.dislikes.size.toString()

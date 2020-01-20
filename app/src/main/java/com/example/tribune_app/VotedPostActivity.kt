@@ -5,10 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.tribune_app.adapter.PostAdapter
 import com.example.tribune_app.adapter.ReactionAdapter
 import com.example.tribune_app.dto.ReactionModel
-import kotlinx.android.synthetic.main.activity_feed.*
+import com.example.tribune_app.utils.postId
+import com.example.tribune_app.utils.userId
 import kotlinx.android.synthetic.main.activity_voted.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -19,6 +19,7 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     ReactionAdapter.OnVoitedItemClickListener {
 
     private var dialog: ProgressDialog? = null
+    private var adapter: ReactionAdapter = ReactionAdapter(mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 setProgressBarIndeterminate(true)
                 show()
             }
-            val postId = intent.getLongExtra("postId", 0L)
+            val postId = intent.postId
             val result = Repository.getReactionsById(postId)
             dialog?.dismiss()
             if (result.isSuccessful) {
@@ -61,22 +62,22 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     override fun onVoitedItemClicked(item: ReactionModel, position: Int) {
         launch {
             val intent = Intent(this@VotedPostActivity, FeedActivity::class.java)
-            intent.putExtra("userId", item.user.id)
+            intent.userId = item.user.id
             startActivity(intent)
         }
     }
 
     private fun refreshData() {
         launch {
-            val postId = intent.getLongExtra("postId", 0L)
+            val postId = intent.postId
             val response = Repository.getReactionsById(postId)
 
             swipeContainerVoited.isRefreshing = false
             if (response.isSuccessful) {
                 val newItems = response.body() ?: mutableListOf()
-                (containerVoted.adapter as ReactionAdapter).items.clear()
-                (containerVoted.adapter as ReactionAdapter).items.addAll(0, newItems)
-                (containerVoted.adapter as ReactionAdapter).notifyDataSetChanged()
+                adapter.items.clear()
+                adapter.items.addAll(0, newItems)
+                adapter.notifyDataSetChanged()
             }
         }
     }

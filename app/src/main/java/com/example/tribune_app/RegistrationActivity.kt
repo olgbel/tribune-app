@@ -12,7 +12,6 @@ import kotlinx.coroutines.*
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.toast
 
-@InternalCoroutinesApi
 class RegistrationActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private var dialog: ProgressDialog? = null
@@ -58,6 +57,7 @@ class RegistrationActivity : AppCompatActivity(), CoroutineScope by MainScope() 
             putString(AUTHENTICATED_SHARED_KEY, token)
         }
 
+    @InternalCoroutinesApi
     override fun onStop() {
         super.onStop()
         dialog?.dismiss()

@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tribune_app.dto.AttachmentModel
 import com.example.tribune_app.utils.REQUEST_IMAGE_CAPTURE
+import com.example.tribune_app.utils.bitmap
 import kotlinx.android.synthetic.main.activity_create_post.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -29,32 +30,17 @@ class CreatePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
 
         createPostBtn.setOnClickListener {
-            launch {
-                dialog = createProgressDialog()
-                try {
-                    if (attachmentModel == null) {
-                        toast(R.string.empty_attachment)
-                    } else if (contentEdt.text.isNullOrEmpty()) {
-                        toast(R.string.empty_content)
-                    }
-                    else {
-                        val result = Repository.createPost(
-                            contentEdt.text.toString(),
-                            linkURLEdt.text.toString(),
-                            attachmentModel!!
-                        )
-                        if (result.isSuccessful) {
-                            handleSuccessfullResult()
-                        } else {
-                            handleFailedResult()
-                        }
-                    }
-                } catch (e: IOException) {
-                    handleFailedResult()
-                } finally {
-                    dialog?.dismiss()
-                }
+
+            val model = attachmentModel
+            if (model == null) {
+                toast(R.string.empty_attachment)
+                return@setOnClickListener
             }
+            if (contentEdt.text.isNullOrEmpty()) {
+                toast(R.string.empty_content)
+                return@setOnClickListener
+            }
+            createPost(model)
         }
     }
 
@@ -64,7 +50,7 @@ class CreatePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap?
+            val imageBitmap = data?.bitmap
             imageBitmap?.let {
                 launch {
                     dialog = createProgressDialog()
@@ -74,9 +60,31 @@ class CreatePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                         imageUploaded()
                         attachmentModel = imageUploadResult.body()
                     } else {
-                        toast("Can't upload image")
+                        toast(R.string.upload_error)
                     }
                 }
+            }
+        }
+    }
+
+    private fun createPost(model: AttachmentModel) {
+        launch {
+            dialog = createProgressDialog()
+            try {
+                val result = Repository.createPost(
+                    contentEdt.text.toString(),
+                    linkURLEdt.text.toString(),
+                    model
+                )
+                if (result.isSuccessful) {
+                    handleSuccessfullResult()
+                } else {
+                    handleFailedResult()
+                }
+            } catch (e: IOException) {
+                handleFailedResult()
+            } finally {
+                dialog?.dismiss()
             }
         }
     }

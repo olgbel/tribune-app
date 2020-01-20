@@ -1,39 +1,39 @@
 package com.example.tribune_app.utils
 
-fun howLongAgo(seconds: Int): String {
+import android.content.Context
+import com.example.tribune_app.R
 
-    val minutes: Double = seconds.toDouble() / 60
+fun howLongAgo(context: Context, seconds: Int): String {
+    println("seconds: $seconds")
+    val minutes: Int = seconds / 60
+    println("minutes: $minutes")
     if (seconds / 60 == 0) {
-        return "менее минуты назад"
+        println("1")
+        println("${R.string.less_minute.toString()}")
+        return R.string.less_minute.toString()
     } else if (minutes < 60) {
-        return "$minutes ${getSuffixForMinutes(minutes)} назад"
+        println("1")
+        return "$minutes ${getSuffixForMinutes(context, minutes)}"
     }
 
-    val hours: Double = minutes / 60
+    val hours: Int = minutes / 60
     return when {
-        hours == 1.0 -> "час назад"
-        hours < 24 -> "${hours.toInt()} ${getSuffixForHours(hours)} назад"
-        hours == 24.0 -> "один день назад"
-        hours < 24 * 30 -> "несколько дней назад"
-        hours == 365.0 * 24 -> "год назад"
-        hours < 365 * 24 -> "несколько месяцев назад"
-        else -> "более года назад"
+        hours < 24 -> "${hours} ${getSuffixForHours(context, hours)}"
+        hours < 24 * 30 -> "${hours} ${getSuffixForDays(context, hours)}"
+        hours == 365 * 24 -> R.string.year_ago.toString()
+        hours < 365 * 24 -> R.string.few_months.toString()
+        else -> R.string.more_year_ago.toString()
     }
 }
 
-fun getSuffixForMinutes(minutes: Double): String {
+fun getSuffixForMinutes(context: Context, minutes: Int) =
+    context.resources.getQuantityString(R.plurals.minutes_plurals, minutes, minutes)
 
-    return when (minutes.toInt()) {
-        1, 21, 31, 41, 51 -> "минуту"
-        2, 3, 4, 22, 23, 24, 32, 33, 34, 42, 43, 44, 52, 53, 54 -> "минуты"
-        else -> "минут"
-    }
-}
 
-fun getSuffixForHours(hours: Double): String {
-    return when (hours.toInt()) {
-        21 -> "час"
-        2, 3, 4, 22, 23 -> "часа"
-        else -> "часов"
-    }
-}
+fun getSuffixForHours(context: Context, hours: Int) =
+    context.resources.getQuantityString(R.plurals.hours_plurals, hours, hours)
+
+fun getSuffixForDays(context: Context, hours: Int) = context.resources.getQuantityString(
+    R.plurals.days_plurals,
+    hours, hours
+)

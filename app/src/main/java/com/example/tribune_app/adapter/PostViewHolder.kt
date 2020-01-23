@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.main_info_post.view.*
 import kotlinx.android.synthetic.main.reaction_buttons_footer.view.*
 import org.jetbrains.anko.toast
 
-class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHolder(view) {
+class PostViewHolder(private val adapter: PostAdapter, view: View) : RecyclerView.ViewHolder(view) {
 
     init {
         with(itemView) {
@@ -53,11 +53,20 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
 
             avatarImg.setOnClickListener {
                 val currentPosition = adapterPosition
-                if (currentPosition != RecyclerView.NO_POSITION){
+                if (currentPosition != RecyclerView.NO_POSITION) {
                     val item = adapter.list[currentPosition]
 
                     adapter.avatarClickListener?.onAvatarClicked(item, currentPosition)
                 }
+            }
+
+            openLinkBtn.setOnClickListener {
+                val currentPosition = adapterPosition
+                val item = adapter.list[currentPosition]
+                val address = Uri.parse(item.linkURL)
+                val openLinkIntent = Intent(Intent.ACTION_VIEW, address)
+
+                startActivity(context, openLinkIntent, null)
             }
         }
     }
@@ -82,18 +91,9 @@ class PostViewHolder(val adapter: PostAdapter, view: View) : RecyclerView.ViewHo
 
             if (!post.linkURL.isNullOrEmpty()) {
                 openLinkBtn.visibility = View.VISIBLE
-
-                openLinkBtn.setOnClickListener {
-                    val address = Uri.parse(post.linkURL)
-                    val openLinkIntent = Intent(Intent.ACTION_VIEW, address)
-
-                    startActivity(context, openLinkIntent, null)
-                }
             } else {
                 openLinkBtn.visibility = View.INVISIBLE
             }
-
-
 
             when {
                 post.likeActionPerforming -> {

@@ -2,8 +2,8 @@ package com.example.tribune_app.dto
 
 data class UserModel(
     val id: Long,
-    var username: String,
+    val username: String,
     var isReadOnly: Boolean = false,
-    var badge: String? = null,
-    var avatar: AttachmentModel?
-    )
+    val badge: String? = null,
+    val avatar: AttachmentModel?
+)

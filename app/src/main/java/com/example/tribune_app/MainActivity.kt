@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.tribune_app.utils.API_SHARED_FILE
 import com.example.tribune_app.utils.AUTHENTICATED_SHARED_KEY
-import com.example.tribune_app.utils.howLongAgo
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.indeterminateProgressDialog

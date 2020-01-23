@@ -30,9 +30,6 @@ interface API {
     @GET("api/v1/posts/after/{id}")
     suspend fun getPostsAfter(@Path("id") id: Long): Response<List<PostModel>>
 
-    @GET("api/v1/posts/before/{id}")
-    suspend fun getPostsBefore(@Path("id") id: Long): Response<List<PostModel>>
-
     @POST("api/v1/posts/like/{id}")
     suspend fun likedByMe(@Path("id") id: Long): Response<PostModel>
 

@@ -37,7 +37,7 @@ class FCMService : FirebaseMessagingService(), CoroutineScope by MainScope() {
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             launch {
                 println(it.token)
-                val response = Repository.registerPushToken(it.token)
+                Repository.registerPushToken(it.token)
             }
         }
     }

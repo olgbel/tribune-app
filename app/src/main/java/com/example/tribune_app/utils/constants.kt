@@ -2,14 +2,12 @@ package com.example.tribune_app.utils
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.widget.ImageView
-import com.bumptech.glide.Glide
 
 const val AUTHENTICATED_SHARED_KEY = "authenticated_shared_key"
 const val API_SHARED_FILE = "API_shared_file"
 const val BASE_URL = //BuildConfig.SERVER_API_URL
-    "https://tribune-app.herokuapp.com/"
-//    "http://10.0.2.2:9999"
+//    "https://tribune-app.herokuapp.com/"
+    "http://10.0.2.2:9999"
 const val SIMPLE_NOTIFY_ID = 1
 const val RANDOM_NOTIFICATION = 100000
 const val UPLOAD_CHANEL_ID = "upload_chanel_id"
@@ -34,9 +32,3 @@ var Intent.postId
     set(value) {
         putExtra(POST_ID_KEY, value)
     }
-
-fun loadImage(photoImg: ImageView, url: String) {
-    Glide.with(photoImg.context)
-        .load(url)
-        .into(photoImg)
-}

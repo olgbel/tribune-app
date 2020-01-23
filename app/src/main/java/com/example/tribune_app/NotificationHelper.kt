@@ -25,8 +25,7 @@ object NotificationHelper {
         val builder = createBuilder(
             context,
             title,
-            text,
-            NotificationManager.IMPORTANCE_HIGH
+            text
         ).setContentIntent(pendingIntent)
 
         showNotification(context, builder)
@@ -46,24 +45,13 @@ object NotificationHelper {
     private fun createBuilder(
         context: Context,
         title: String,
-        content: String,
-        priority: Int
-    ): NotificationCompat.Builder {
-        val builder = createBuilder(context, title, content)
-        builder.priority = priority
-        return builder
-    }
-
-    private fun createBuilder(
-        context: Context,
-        title: String,
         content: String
     ): NotificationCompat.Builder =
         NotificationCompat.Builder(context, UPLOAD_CHANEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentTitle(title)
             .setContentText(content)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationManager.IMPORTANCE_HIGH)
 
     private fun createNotificationChannelIfNotCreated(context: Context) {
         if (!channelCreated) {

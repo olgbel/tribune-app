@@ -1,16 +1,13 @@
 package com.example.tribune_app
 
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tribune_app.adapter.PostAdapter
 import com.example.tribune_app.dto.PostModel
 import com.example.tribune_app.dto.ReactionModel
-import com.example.tribune_app.utils.howLongAgo
 import com.example.tribune_app.utils.postId
 import com.example.tribune_app.utils.userId
 import com.google.android.gms.common.ConnectionResult
@@ -30,7 +27,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     PostAdapter.OnViewsBtnClickListener, PostAdapter.OnAvatarClickListener {
 
     private var dialog: ProgressDialog? = null
-    private var adapter: PostAdapter = PostAdapter(this@FeedActivity, mutableListOf())
+    private var adapter: PostAdapter = PostAdapter(mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +69,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             launch {
                 println(it.token)
-                val response = Repository.registerPushToken(it.token)
+                Repository.registerPushToken(it.token)
             }
         }
 
@@ -109,7 +106,6 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 with(containerFeed) {
                     layoutManager = LinearLayoutManager(this@FeedActivity)
                     adapter = PostAdapter(
-                        this@FeedActivity,
                         requireNotNull(result.body()).toMutableList()
                     ).apply {
                         likeBtnClickListener = this@FeedActivity
@@ -201,11 +197,9 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     }
 
     override fun onAvatarClicked(item: PostModel, position: Int) {
-        launch {
-            val intent = Intent(this@FeedActivity, FeedActivity::class.java)
-            intent.userId = item.author.id
-            startActivity(intent)
-        }
+        val intent = Intent(this@FeedActivity, FeedActivity::class.java)
+        intent.userId = item.author.id
+        startActivity(intent)
     }
 
     private fun isReactedByMe(userId: Long, reactionSet: Set<ReactionModel>) =
@@ -226,12 +220,11 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
 
     private fun loadMore() {
         launch {
-            val response =
-                Repository.getPostsAfter((containerFeed.adapter as PostAdapter).list.size.toLong())
+            val response = Repository.getPostsAfter(adapter.list.size.toLong())
             swipeContainerFeed.isRefreshing = false
             if (response.isSuccessful) {
                 val newItems = response.body() ?: mutableListOf()
-                adapter.list.addAll((containerFeed.adapter as PostAdapter).list.size, newItems)
+                adapter.list.addAll(adapter.list.size, newItems)
                 adapter.notifyDataSetChanged()
             }
         }

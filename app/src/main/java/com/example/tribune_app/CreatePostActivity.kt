@@ -2,7 +2,6 @@ package com.example.tribune_app
 
 import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View

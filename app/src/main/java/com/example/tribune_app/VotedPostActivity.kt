@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
+import java.io.IOException
 
 class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     ReactionAdapter.OnVoitedItemClickListener {
@@ -60,24 +61,27 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     }
 
     override fun onVoitedItemClicked(item: ReactionModel, position: Int) {
-        launch {
-            val intent = Intent(this@VotedPostActivity, FeedActivity::class.java)
-            intent.userId = item.user.id
-            startActivity(intent)
-        }
+        val intent = Intent(this@VotedPostActivity, FeedActivity::class.java)
+        intent.userId = item.user.id
+        startActivity(intent)
     }
 
     private fun refreshData() {
         launch {
-            val postId = intent.postId
-            val response = Repository.getReactionsById(postId)
+            try {
+                val postId = intent.postId
+                val response = Repository.getReactionsById(postId)
 
-            swipeContainerVoited.isRefreshing = false
-            if (response.isSuccessful) {
-                val newItems = response.body() ?: mutableListOf()
-                adapter.items.clear()
-                adapter.items.addAll(0, newItems)
-                adapter.notifyDataSetChanged()
+                swipeContainerVoited.isRefreshing = false
+                if (response.isSuccessful) {
+                    val newItems = response.body() ?: mutableListOf()
+                    adapter.items.clear()
+                    adapter.items.addAll(0, newItems)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+            catch (e: IOException) {
+                toast(R.string.error_occured)
             }
         }
     }

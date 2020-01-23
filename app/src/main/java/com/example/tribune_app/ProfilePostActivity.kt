@@ -1,7 +1,6 @@
 package com.example.tribune_app
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
@@ -34,7 +33,7 @@ class ProfilePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     val result = Repository.updateUser(userId, attachmentModel!!)
 
                     if (result.isSuccessful) {
-                        handleSuccessfullResult()
+                        handleSuccessfulResult()
                     } else {
                         handleFailedResult()
                     }
@@ -79,7 +78,7 @@ class ProfilePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     if (imageUploadResult.isSuccessful) {
                         attachmentModel = imageUploadResult.body()
                     } else {
-                        toast("Can't upload image")
+                        toast(R.string.upload_error)
                     }
                 }
             }
@@ -94,7 +93,7 @@ class ProfilePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    private fun handleSuccessfullResult() {
+    private fun handleSuccessfulResult() {
         toast(R.string.user_info_updated)
         finish()
     }

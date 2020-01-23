@@ -1,7 +1,15 @@
 package com.example.tribune_app.utils
 
 import android.content.Context
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.example.tribune_app.R
+
+fun loadImage(photoImg: ImageView, url: String) {
+    Glide.with(photoImg.context)
+        .load(url)
+        .into(photoImg)
+}
 
 fun getToken(ctx: Context) =
     ctx.getSharedPreferences(API_SHARED_FILE, Context.MODE_PRIVATE)
@@ -17,8 +25,8 @@ fun howLongAgo(context: Context, seconds: Int): String {
 
     val hours: Int = minutes / 60
     return when {
-        hours < 24 -> "${hours} ${getSuffixForHours(context, hours)}"
-        hours < 24 * 30 -> "${hours} ${getSuffixForDays(context, hours)}"
+        hours < 24 -> "$hours ${getSuffixForHours(context, hours)}"
+        hours < 24 * 30 -> "$hours ${getSuffixForDays(context, hours)}"
         hours == 365 * 24 -> context.resources.getString(R.string.year_ago)
         hours < 365 * 24 -> context.resources.getString(R.string.few_months)
         else -> context.resources.getString(R.string.more_year_ago)

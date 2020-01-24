@@ -34,27 +34,32 @@ class VotedPostActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     override fun onStart() {
         super.onStart()
         launch {
-            dialog = ProgressDialog(this@VotedPostActivity).apply {
-                setMessage(this@VotedPostActivity.getString(R.string.please_wait))
-                setTitle(R.string.dowloading_voted_list)
-                setCancelable(false)
-                setProgressBarIndeterminate(true)
-                show()
-            }
-            val postId = intent.postId
-            val result = Repository.getReactionsById(postId)
-            dialog?.dismiss()
-            if (result.isSuccessful) {
-                with(containerVoted) {
-                    layoutManager = LinearLayoutManager(this@VotedPostActivity)
-                    adapter = ReactionAdapter(
-                        requireNotNull(result.body()).toMutableList()
-                    ).apply {
-                        voitedItemClickListener = this@VotedPostActivity
-                    }
+            try {
+                dialog = ProgressDialog(this@VotedPostActivity).apply {
+                    setMessage(this@VotedPostActivity.getString(R.string.please_wait))
+                    setTitle(R.string.dowloading_voted_list)
+                    setCancelable(false)
+                    setProgressBarIndeterminate(true)
+                    show()
                 }
-            } else {
-                toast(R.string.error_occured)
+                val postId = intent.postId
+                val result = Repository.getReactionsById(postId)
+                dialog?.dismiss()
+                if (result.isSuccessful) {
+                    with(containerVoted) {
+                        layoutManager = LinearLayoutManager(this@VotedPostActivity)
+                        adapter = ReactionAdapter(
+                            requireNotNull(result.body()).toMutableList()
+                        ).apply {
+                            voitedItemClickListener = this@VotedPostActivity
+                        }
+                    }
+                } else {
+                    toast(R.string.error_occured)
+                }
+            }
+            catch (e: IOException){
+                toast(R.string.voted_activity_error)
             }
         }
 

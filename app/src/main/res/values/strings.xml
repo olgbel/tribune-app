@@ -41,6 +41,13 @@
     <string name="notification_channel_name">react notification</string>
     <string name="notification_channel_description">someone\'s react on your post</string>
     <string name="google_play_unavailable">google play is unavailable</string>
+    <string name="push_token_error">Register Push token error</string>
+    <string name="dowloading_post_error">Error while downloading posts</string>
+    <string name="like_process_error">error during voting the post</string>
+    <string name="load_more_error">Cannot load more posts. Please try again</string>
+    <string name="image_loading_error">Image loading error</string>
+    <string name="profile_error">User profile page error</string>
+    <string name="voted_activity_error">Voted post activity downloading failed</string>
 
     <plurals name="minutes_plurals">
         <item quantity="one">минуту назад</item>

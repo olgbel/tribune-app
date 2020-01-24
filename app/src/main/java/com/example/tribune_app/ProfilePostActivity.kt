@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
+import java.io.IOException
 
 class ProfilePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
@@ -29,14 +30,19 @@ class ProfilePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
         updateProfileBtn.setOnClickListener {
             launch {
-                if (attachmentModel != null) {
-                    val result = Repository.updateUser(userId, attachmentModel!!)
+                try {
+                    if (attachmentModel != null) {
+                        val result = Repository.updateUser(userId, attachmentModel!!)
 
-                    if (result.isSuccessful) {
-                        handleSuccessfulResult()
-                    } else {
-                        handleFailedResult()
+                        if (result.isSuccessful) {
+                            handleSuccessfulResult()
+                        } else {
+                            handleFailedResult()
+                        }
                     }
+                }
+                catch (e: IOException){
+                    toast(R.string.image_loading_error)
                 }
             }
         }
@@ -45,22 +51,26 @@ class ProfilePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     override fun onStart() {
         super.onStart()
         launch {
-            val response = Repository.getCurrentUser()
-            if (response.isSuccessful) {
-                val userModel = requireNotNull(response.body())
-                usernameTv.text = userModel.username
-                badgeTv.text = userModel.badge
-                userId = userModel.id
+            try {
+                val response = Repository.getCurrentUser()
+                if (response.isSuccessful) {
+                    val userModel = requireNotNull(response.body())
+                    usernameTv.text = userModel.username
+                    badgeTv.text = userModel.badge
+                    userId = userModel.id
 
-                if (userModel.avatar != null){
-                    loadImage(avatarImg, userModel.avatar!!.url)
-                }
-                else {
-                    avatarImg.setImageResource(R.drawable.ic_avatar_48dp)
-                }
+                    if (userModel.avatar != null) {
+                        loadImage(avatarImg, userModel.avatar!!.url)
+                    } else {
+                        avatarImg.setImageResource(R.drawable.ic_avatar_48dp)
+                    }
 
-            } else {
-                toast(R.string.error_occured)
+                } else {
+                    toast(R.string.error_occured)
+                }
+            }
+            catch (e: IOException){
+                toast(R.string.profile_error)
             }
         }
     }
@@ -74,11 +84,16 @@ class ProfilePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             val imageBitmap = data?.bitmap
             imageBitmap?.let {
                 launch {
-                    val imageUploadResult = Repository.upload(it)
-                    if (imageUploadResult.isSuccessful) {
-                        attachmentModel = imageUploadResult.body()
-                    } else {
-                        toast(R.string.upload_error)
+                    try {
+                        val imageUploadResult = Repository.upload(it)
+                        if (imageUploadResult.isSuccessful) {
+                            attachmentModel = imageUploadResult.body()
+                        } else {
+                            toast(R.string.upload_error)
+                        }
+                    }
+                    catch (e: IOException){
+                        toast(R.string.image_loading_error)
                     }
                 }
             }

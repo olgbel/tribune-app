@@ -12,6 +12,7 @@ import kotlinx.coroutines.*
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import java.io.IOException
 
 class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
@@ -41,26 +42,30 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         } else {
             btn_login.setOnClickListener {
                 launch {
-                    dialog =
-                        indeterminateProgressDialog(
-                            message = R.string.please_wait,
-                            title = R.string.authentication
-                        ) {
-                            setCancelable(false)
-                        }
-                    val response =
-                        Repository.authenticate(
-                            edt_login.text.toString(),
-                            edt_password.text.toString()
-                        )
-                    dialog?.dismiss()
-                    if (response.isSuccessful) {
-                        toast(R.string.success)
-                        setUserAuth(requireNotNull(response.body()).token)
-                        Repository.createRetrofitWithAuth(requireNotNull(response.body()).token)
+                    try {
+                        dialog =
+                            indeterminateProgressDialog(
+                                message = R.string.please_wait,
+                                title = R.string.authentication
+                            ) {
+                                setCancelable(false)
+                            }
+                        val response =
+                            Repository.authenticate(
+                                edt_login.text.toString(),
+                                edt_password.text.toString()
+                            )
+                        dialog?.dismiss()
+                        if (response.isSuccessful) {
+                            toast(R.string.success)
+                            setUserAuth(requireNotNull(response.body()).token)
+                            Repository.createRetrofitWithAuth(requireNotNull(response.body()).token)
 
-                        startFeedActivity()
-                    } else {
+                            startFeedActivity()
+                        } else {
+                            toast(R.string.authentication_failed)
+                        }
+                    } catch (e: IOException) {
                         toast(R.string.authentication_failed)
                     }
                 }
@@ -68,7 +73,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    private fun startFeedActivity(){
+    private fun startFeedActivity() {
         val feedActivityIntent = Intent(this@MainActivity, FeedActivity::class.java)
         startActivity(feedActivityIntent)
         finish()

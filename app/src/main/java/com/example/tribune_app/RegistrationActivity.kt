@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_registration.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.toast
+import java.io.IOException
 
 class RegistrationActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
@@ -27,24 +28,29 @@ class RegistrationActivity : AppCompatActivity(), CoroutineScope by MainScope() 
                 toast(R.string.different_passwords)
             } else {
                 launch {
-                    dialog =
-                        indeterminateProgressDialog(
-                            message = R.string.please_wait,
-                            title = R.string.signup
-                        ) {
-                            setCancelable(false)
+                    try {
+                        dialog =
+                            indeterminateProgressDialog(
+                                message = R.string.please_wait,
+                                title = R.string.signup
+                            ) {
+                                setCancelable(false)
+                            }
+                        val response =
+                            Repository.register(
+                                edt_registration_login.toString(),
+                                password
+                            )
+                        dialog?.dismiss()
+                        if (response.isSuccessful) {
+                            toast(R.string.success)
+                            setUserAuth(requireNotNull(response.body()).token)
+                            finish()
+                        } else {
+                            toast(R.string.registration_failed)
                         }
-                    val response =
-                        Repository.register(
-                            edt_registration_login.toString(),
-                            password
-                        )
-                    dialog?.dismiss()
-                    if (response.isSuccessful) {
-                        toast(R.string.success)
-                        setUserAuth(requireNotNull(response.body()).token)
-                        finish()
-                    } else {
+                    }
+                    catch (e: IOException){
                         toast(R.string.registration_failed)
                     }
                 }

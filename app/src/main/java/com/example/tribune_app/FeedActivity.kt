@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 import retrofit2.Response
+import java.io.IOException
 
 class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     PostAdapter.OnLikeBtnClickListener, PostAdapter.OnDislikeBtnClickListener,
@@ -69,7 +70,11 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             launch {
                 println(it.token)
-                Repository.registerPushToken(it.token)
+                try {
+                    Repository.registerPushToken(it.token)
+                } catch (e: IOException) {
+                    toast(R.string.push_token_error)
+                }
             }
         }
 
@@ -85,106 +90,119 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 setProgressBarIndeterminate(true)
                 show()
             }
-
-            val currentUser = Repository.getCurrentUser()
-            if (currentUser.isSuccessful && currentUser.body()?.isReadOnly!!) {
-                addPostBtn.hide()
-            } else {
-                addPostBtn.show()
-            }
-
-            val result: Response<List<PostModel>>
-            val userId = intent.userId
-
-            result = if (userId != 0L) {
-                Repository.getPostsByUserId(userId)
-            } else {
-                Repository.getRecentPosts()
-            }
-            dialog?.dismiss()
-            if (result.isSuccessful) {
-                with(containerFeed) {
-                    layoutManager = LinearLayoutManager(this@FeedActivity)
-                    adapter = PostAdapter(
-                        requireNotNull(result.body()).toMutableList()
-                    ).apply {
-                        likeBtnClickListener = this@FeedActivity
-                        dislikeBtnClickListener = this@FeedActivity
-                        viewsBtnClickListener = this@FeedActivity
-                        avatarClickListener = this@FeedActivity
-                    }
+            try {
+                val currentUser = Repository.getCurrentUser()
+                if (currentUser.isSuccessful && currentUser.body()?.isReadOnly!!) {
+                    addPostBtn.hide()
+                } else {
+                    addPostBtn.show()
                 }
-            } else {
-                toast(R.string.error_occured)
+
+                val result: Response<List<PostModel>>
+                val userId = intent.userId
+
+                result = if (userId != 0L) {
+                    Repository.getPostsByUserId(userId)
+                } else {
+                    Repository.getRecentPosts()
+                }
+                dialog?.dismiss()
+                if (result.isSuccessful) {
+                    with(containerFeed) {
+                        layoutManager = LinearLayoutManager(this@FeedActivity)
+                        adapter = PostAdapter(
+                            requireNotNull(result.body()).toMutableList()
+                        ).apply {
+                            likeBtnClickListener = this@FeedActivity
+                            dislikeBtnClickListener = this@FeedActivity
+                            viewsBtnClickListener = this@FeedActivity
+                            avatarClickListener = this@FeedActivity
+                        }
+                    }
+                } else {
+                    toast(R.string.error_occured)
+                }
+            } catch (e: IOException) {
+                toast(R.string.dowloading_post_error)
             }
         }
     }
 
     override fun onLikeBtnClicked(item: PostModel, position: Int) {
         launch {
-            item.likeActionPerforming = true
-            with(containerFeed) {
-                val userResponse = Repository.getCurrentUser()
-                if (userResponse.isSuccessful) {
-                    if (isReactedByMe(
-                            requireNotNull(userResponse.body()?.id),
-                            item.likes.plus(item.dislikes)
-                        )
-                    ) {
-                        toast(R.string.already_voted)
-                    } else {
-                        adapter?.notifyItemChanged(position)
-
-                        val response = Repository.likedByMe(item.id)
-                        item.likeActionPerforming = false
-                        if (response.isSuccessful) {
-                            item.updateLikes(requireNotNull(response.body()))
-                        }
-                        adapter?.notifyItemChanged(position)
-
-                        if (item.author.isReadOnly) {
-                            addPostBtn.hide()
+            try {
+                item.likeActionPerforming = true
+                with(containerFeed) {
+                    val userResponse = Repository.getCurrentUser()
+                    if (userResponse.isSuccessful) {
+                        if (isReactedByMe(
+                                requireNotNull(userResponse.body()?.id),
+                                item.likes.plus(item.dislikes)
+                            )
+                        ) {
+                            toast(R.string.already_voted)
                         } else {
-                            addPostBtn.show()
+                            adapter?.notifyItemChanged(position)
+
+                            val response = Repository.likedByMe(item.id)
+                            item.likeActionPerforming = false
+                            if (response.isSuccessful) {
+                                item.updateLikes(requireNotNull(response.body()))
+                            }
+                            adapter?.notifyItemChanged(position)
+
+                            if (item.author.isReadOnly) {
+                                addPostBtn.hide()
+                            } else {
+                                addPostBtn.show()
+                            }
                         }
+                    } else {
+                        toast(R.string.current_user_error)
                     }
-                } else {
-                    toast(R.string.current_user_error)
                 }
+            }
+            catch (e: IOException){
+                toast(R.string.like_process_error)
             }
         }
     }
 
     override fun onDislikeBtnClicked(item: PostModel, position: Int) {
         launch {
-            item.dislikeActionPerforming = true
-            with(containerFeed) {
-                val userResponse = Repository.getCurrentUser()
-                if (userResponse.isSuccessful) {
-                    if (isReactedByMe(
-                            requireNotNull(userResponse.body()?.id),
-                            item.likes.plus(item.dislikes)
-                        )
-                    ) {
-                        toast(R.string.already_voted)
-                    } else {
-                        adapter?.notifyItemChanged(position)
-
-                        val response = Repository.dislikedByMe(item.id)
-                        item.dislikeActionPerforming = false
-                        if (response.isSuccessful) {
-                            item.updateDislikes(requireNotNull(response.body()))
-                        }
-                        adapter?.notifyItemChanged(position)
-                        if (item.author.isReadOnly) {
-                            addPostBtn.hide()
+            try {
+                item.dislikeActionPerforming = true
+                with(containerFeed) {
+                    val userResponse = Repository.getCurrentUser()
+                    if (userResponse.isSuccessful) {
+                        if (isReactedByMe(
+                                requireNotNull(userResponse.body()?.id),
+                                item.likes.plus(item.dislikes)
+                            )
+                        ) {
+                            toast(R.string.already_voted)
                         } else {
-                            addPostBtn.show()
+                            adapter?.notifyItemChanged(position)
+
+                            val response = Repository.dislikedByMe(item.id)
+                            item.dislikeActionPerforming = false
+                            if (response.isSuccessful) {
+                                item.updateDislikes(requireNotNull(response.body()))
+                            }
+                            adapter?.notifyItemChanged(position)
+                            if (item.author.isReadOnly) {
+                                addPostBtn.hide()
+                            } else {
+                                addPostBtn.show()
+                            }
                         }
+                    } else {
+                        toast(R.string.current_user_error)
                     }
-                } else {
-                    toast(R.string.current_user_error)
                 }
+            }
+            catch (e:IOException){
+                toast(R.string.like_process_error)
             }
         }
     }
@@ -207,25 +225,34 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
 
     private fun refreshData() {
         launch {
-            val response = Repository.getRecentPosts()
-            swipeContainerFeed.isRefreshing = false
-            if (response.isSuccessful) {
-                val newItems = response.body() ?: mutableListOf()
-                adapter.list.clear()
-                adapter.list.addAll(0, newItems)
-                adapter.notifyDataSetChanged()
+            try {
+                val response = Repository.getRecentPosts()
+                swipeContainerFeed.isRefreshing = false
+                if (response.isSuccessful) {
+                    val newItems = response.body() ?: mutableListOf()
+                    adapter.list.clear()
+                    adapter.list.addAll(0, newItems)
+                    adapter.notifyDataSetChanged()
+                }
+            } catch (e: IOException) {
+                toast(R.string.error_occured)
             }
         }
     }
 
     private fun loadMore() {
         launch {
-            val response = Repository.getPostsAfter(adapter.list.size.toLong())
-            swipeContainerFeed.isRefreshing = false
-            if (response.isSuccessful) {
-                val newItems = response.body() ?: mutableListOf()
-                adapter.list.addAll(adapter.list.size, newItems)
-                adapter.notifyDataSetChanged()
+            try {
+                val response = Repository.getPostsAfter(adapter.list.size.toLong())
+                swipeContainerFeed.isRefreshing = false
+                if (response.isSuccessful) {
+                    val newItems = response.body() ?: mutableListOf()
+                    adapter.list.addAll(adapter.list.size, newItems)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+            catch (e: IOException){
+                toast(R.string.load_more_error)
             }
         }
     }

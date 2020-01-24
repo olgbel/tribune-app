@@ -5,9 +5,8 @@ import android.graphics.Bitmap
 
 const val AUTHENTICATED_SHARED_KEY = "authenticated_shared_key"
 const val API_SHARED_FILE = "API_shared_file"
-const val BASE_URL = //BuildConfig.SERVER_API_URL
-//    "https://tribune-app.herokuapp.com/"
-    "http://10.0.2.2:9999"
+const val BASE_URL = "https://tribune-app.herokuapp.com/"
+
 const val SIMPLE_NOTIFY_ID = 1
 const val RANDOM_NOTIFICATION = 100000
 const val UPLOAD_CHANEL_ID = "upload_chanel_id"

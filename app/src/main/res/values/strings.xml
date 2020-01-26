@@ -48,6 +48,8 @@
     <string name="image_loading_error">Image loading error</string>
     <string name="profile_error">User profile page error</string>
     <string name="voted_activity_error">Voted post activity downloading failed</string>
+    <string name="empty">List of posts is empty</string>
+    <string name="retry">Please retry</string>
 
     <plurals name="minutes_plurals">
         <item quantity="one">минуту назад</item>

@@ -5,6 +5,7 @@ import com.example.tribune_app.api.API
 import com.example.tribune_app.api.AuthRequestParams
 import com.example.tribune_app.api.RegistrationRequestParams
 import com.example.tribune_app.api.interceptor.InjectAuthTokenInterceptor
+import com.example.tribune_app.api.interceptor.LogoutInterceptor
 import com.example.tribune_app.dto.AttachmentModel
 import com.example.tribune_app.dto.CreatePostRequest
 import com.example.tribune_app.dto.PushRequestParamsDto
@@ -29,12 +30,15 @@ object Repository {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+    lateinit var logoutInterceptor: LogoutInterceptor
+
     fun createRetrofitWithAuth(authToken: String) {
         val httpLoggerInterceptor = HttpLoggingInterceptor()
         httpLoggerInterceptor.level = HttpLoggingInterceptor.Level.BODY
         val client = OkHttpClient.Builder()
             .addInterceptor(InjectAuthTokenInterceptor(authToken))
             .addInterceptor(httpLoggerInterceptor)
+            .addInterceptor(logoutInterceptor)
             .build()
         retrofit = Retrofit.Builder()
             .client(client)

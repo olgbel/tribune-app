@@ -3,6 +3,7 @@ package com.example.tribune_app
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tribune_app.adapter.PostAdapter
@@ -48,6 +49,11 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
 
         loadMoreBtn.setOnClickListener {
             loadMore()
+        }
+
+        errorButton.setOnClickListener {
+            swipeContainerFeed.isRefreshing = true
+            refreshData()
         }
 
         requestToken()
@@ -108,10 +114,15 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 }
                 dialog?.dismiss()
                 if (result.isSuccessful) {
+                    val posts = result.body()?.toMutableList() ?: mutableListOf()
+                    if (posts.isEmpty()) {
+                        showErrorState(R.string.empty)
+                        return@launch
+                    }
                     with(containerFeed) {
                         layoutManager = LinearLayoutManager(this@FeedActivity)
                         adapter = PostAdapter(
-                            requireNotNull(result.body()).toMutableList()
+                            posts
                         ).apply {
                             likeBtnClickListener = this@FeedActivity
                             dislikeBtnClickListener = this@FeedActivity
@@ -119,10 +130,14 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                             avatarClickListener = this@FeedActivity
                         }
                     }
+
+                    //updateList(posts)
                 } else {
+                    showErrorState()
                     toast(R.string.error_occured)
                 }
             } catch (e: IOException) {
+                showErrorState()
                 toast(R.string.dowloading_post_error)
             }
         }
@@ -161,8 +176,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                         toast(R.string.current_user_error)
                     }
                 }
-            }
-            catch (e: IOException){
+            } catch (e: IOException) {
                 toast(R.string.like_process_error)
             }
         }
@@ -200,8 +214,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                         toast(R.string.current_user_error)
                     }
                 }
-            }
-            catch (e:IOException){
+            } catch (e: IOException) {
                 toast(R.string.like_process_error)
             }
         }
@@ -229,14 +242,21 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 val response = Repository.getRecentPosts()
                 swipeContainerFeed.isRefreshing = false
                 if (response.isSuccessful) {
-                    val newItems = response.body() ?: mutableListOf()
-                    adapter.list.clear()
-                    adapter.list.addAll(0, newItems)
-                    adapter.notifyDataSetChanged()
+                    updateList(response.body() ?: mutableListOf())
                 }
             } catch (e: IOException) {
+                swipeContainerFeed.isRefreshing = false
                 toast(R.string.error_occured)
             }
+        }
+    }
+
+    private fun updateList(newItems: List<PostModel>) {
+        adapter.list.clear()
+        adapter.list.addAll(newItems)
+        adapter.notifyDataSetChanged()
+        if (newItems.isNotEmpty()) {
+            hideErrorState()
         }
     }
 
@@ -250,11 +270,20 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                     adapter.list.addAll(adapter.list.size, newItems)
                     adapter.notifyDataSetChanged()
                 }
-            }
-            catch (e: IOException){
+            } catch (e: IOException) {
                 toast(R.string.load_more_error)
             }
         }
+    }
+
+    private fun showErrorState(text: Int = R.string.error_occured) {
+        dialog?.dismiss()
+        errorGroup.visibility = View.VISIBLE
+        errorTitle.text = getString(text)
+    }
+
+    private fun hideErrorState() {
+        errorGroup.visibility = View.GONE
     }
 
     override fun onDestroy() {

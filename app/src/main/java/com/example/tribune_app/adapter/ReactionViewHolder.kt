@@ -47,7 +47,7 @@ class ReactionViewHolder(val adapter: ReactionAdapter, view: View) : RecyclerVie
             createdTv.text = dateFormatted
 
             if (reaction.user.avatar != null) {
-                loadImage(avatarIv, reaction.user.avatar!!.url)
+                avatarIv.loadImage(reaction.user.avatar!!.url)
             } else {
                 avatarIv.setImageResource(R.drawable.ic_avatar_48dp)
             }

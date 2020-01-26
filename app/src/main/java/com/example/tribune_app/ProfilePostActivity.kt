@@ -60,7 +60,7 @@ class ProfilePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     userId = userModel.id
 
                     if (userModel.avatar != null) {
-                        loadImage(avatarImg, userModel.avatar!!.url)
+                        avatarImg.loadImage(userModel.avatar!!.url)
                     } else {
                         avatarImg.setImageResource(R.drawable.ic_avatar_48dp)
                     }

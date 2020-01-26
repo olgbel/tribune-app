@@ -81,10 +81,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     override fun onStart() {
         super.onStart()
-        if (isAuthenticated()) {
-            startActivity<FeedActivity>()
-            finish()
-        }
+        authenticate()
+//        if (isAuthenticated()) {
+//            startActivity<FeedActivity>()
+//            finish()
+//        }
     }
 
     private fun isAuthenticated() =

@@ -5,10 +5,10 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.tribune_app.R
 
-fun loadImage(photoImg: ImageView, url: String) {
-    Glide.with(photoImg.context)
+fun ImageView.loadImage(url: String) {
+    Glide.with(context)
         .load(url)
-        .into(photoImg)
+        .into(this)
 }
 
 fun getToken(ctx: Context) =

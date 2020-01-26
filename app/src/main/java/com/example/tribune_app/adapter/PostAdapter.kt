@@ -9,8 +9,8 @@ import com.example.tribune_app.dto.PostModel
 class PostAdapter(
     var list: MutableList<PostModel>
 ) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    RecyclerView.Adapter<PostViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         return PostViewHolder(
             this,
             LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent, false)
@@ -19,8 +19,8 @@ class PostAdapter(
 
     override fun getItemCount() = list.size
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as PostViewHolder).bind(list[position])
+    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        holder.bind(list[position])
     }
 
     var likeBtnClickListener: OnLikeBtnClickListener? = null

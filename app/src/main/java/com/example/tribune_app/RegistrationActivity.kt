@@ -38,7 +38,7 @@ class RegistrationActivity : AppCompatActivity(), CoroutineScope by MainScope() 
                             }
                         val response =
                             Repository.register(
-                                edt_registration_login.toString(),
+                                edt_registration_login.text.toString(),
                                 password
                             )
                         dialog?.dismiss()
@@ -52,6 +52,7 @@ class RegistrationActivity : AppCompatActivity(), CoroutineScope by MainScope() 
                     }
                     catch (e: IOException){
                         toast(R.string.registration_failed)
+                        dialog?.dismiss()
                     }
                 }
             }

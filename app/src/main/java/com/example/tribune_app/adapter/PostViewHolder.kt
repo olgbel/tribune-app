@@ -82,12 +82,12 @@ class PostViewHolder(private val adapter: PostAdapter, view: View) : RecyclerVie
             dislikesTv.text = post.dislikes.size.toString()
 
             if (post.author.avatar != null) {
-                loadImage(avatarImg, post.author.avatar!!.url)
+                avatarImg.loadImage(post.author.avatar!!.url)
             } else {
                 avatarImg.setImageResource(R.drawable.ic_avatar_48dp)
             }
 
-            loadImage(photoImg, post.attachment.url)
+            photoImg.loadImage(post.attachment.url)
 
             if (!post.linkURL.isNullOrEmpty()) {
                 openLinkBtn.visibility = View.VISIBLE

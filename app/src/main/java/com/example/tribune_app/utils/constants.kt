@@ -31,3 +31,4 @@ var Intent.postId
     set(value) {
         putExtra(POST_ID_KEY, value)
     }
+

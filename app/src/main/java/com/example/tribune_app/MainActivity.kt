@@ -10,7 +10,6 @@ import com.example.tribune_app.utils.AUTHENTICATED_SHARED_KEY
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.indeterminateProgressDialog
-import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import java.io.IOException
 
@@ -82,10 +81,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     override fun onStart() {
         super.onStart()
         authenticate()
-//        if (isAuthenticated()) {
-//            startActivity<FeedActivity>()
-//            finish()
-//        }
     }
 
     private fun isAuthenticated() =

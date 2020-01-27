@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tribune_app.adapter.PostAdapter
 import com.example.tribune_app.dto.PostModel
 import com.example.tribune_app.dto.ReactionModel
@@ -29,11 +28,18 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     PostAdapter.OnViewsBtnClickListener, PostAdapter.OnAvatarClickListener {
 
     private var dialog: ProgressDialog? = null
-    private var adapter: PostAdapter = PostAdapter(mutableListOf())
+    private var adapter: PostAdapter = PostAdapter(mutableListOf()).apply {
+        likeBtnClickListener = this@FeedActivity
+        dislikeBtnClickListener = this@FeedActivity
+        viewsBtnClickListener = this@FeedActivity
+        avatarClickListener = this@FeedActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
+
+        containerFeed.adapter = adapter
 
         addPostBtn.setOnClickListener {
             startActivity(Intent(this, CreatePostActivity::class.java))
@@ -115,23 +121,13 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 dialog?.dismiss()
                 if (result.isSuccessful) {
                     val posts = result.body()?.toMutableList() ?: mutableListOf()
+
                     if (posts.isEmpty()) {
                         showErrorState(R.string.empty)
                         return@launch
                     }
-                    with(containerFeed) {
-                        layoutManager = LinearLayoutManager(this@FeedActivity)
-                        adapter = PostAdapter(
-                            posts
-                        ).apply {
-                            likeBtnClickListener = this@FeedActivity
-                            dislikeBtnClickListener = this@FeedActivity
-                            viewsBtnClickListener = this@FeedActivity
-                            avatarClickListener = this@FeedActivity
-                        }
-                    }
 
-                    //updateList(posts)
+                    updateList(posts)
                 } else {
                     showErrorState()
                     toast(R.string.error_occured)

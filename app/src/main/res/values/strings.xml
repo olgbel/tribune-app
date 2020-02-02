@@ -34,10 +34,10 @@
     <string name="current_user_error">Error with current user request</string>
     <string name="author_name">author name</string>
     <string name="badge">badge</string>
-    <string name="less_minute">менее минуты назад</string>
-    <string name="year_ago">год назад</string>
-    <string name="few_months">несколько месяцев назад</string>
-    <string name="more_year_ago">более года назад</string>
+    <string name="less_minute">less than minute ago</string>
+    <string name="year_ago">year ago</string>
+    <string name="few_months">few months ago</string>
+    <string name="more_year_ago">more year ago</string>
     <string name="notification_channel_name">react notification</string>
     <string name="notification_channel_description">someone\'s react on your post</string>
     <string name="google_play_unavailable">google play is unavailable</string>
@@ -50,6 +50,7 @@
     <string name="voted_activity_error">Voted post activity downloading failed</string>
     <string name="empty">List of posts is empty</string>
     <string name="retry">Please retry</string>
+    <string name="create_post_error">create post error</string>
 
     <plurals name="minutes_plurals">
         <item quantity="one">минуту назад</item>

@@ -52,13 +52,17 @@ class CreatePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             val imageBitmap = data?.bitmap
             imageBitmap?.let {
                 launch {
-                    dialog = createProgressDialog()
-                    val imageUploadResult = Repository.upload(it)
-                    dialog?.dismiss()
-                    if (imageUploadResult.isSuccessful) {
-                        imageUploaded()
-                        attachmentModel = imageUploadResult.body()
-                    } else {
+                    try {
+                        dialog = createProgressDialog()
+                        val imageUploadResult = Repository.upload(it)
+                        dialog?.dismiss()
+                        if (imageUploadResult.isSuccessful) {
+                            imageUploaded()
+                            attachmentModel = imageUploadResult.body()
+                        } else {
+                            toast(R.string.upload_error)
+                        }
+                    } catch (e: IOException) {
                         toast(R.string.upload_error)
                     }
                 }
@@ -66,24 +70,30 @@ class CreatePostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+
     private fun createPost(model: AttachmentModel) {
         launch {
-            dialog = createProgressDialog()
             try {
-                val result = Repository.createPost(
-                    contentEdt.text.toString(),
-                    linkURLEdt.text.toString(),
-                    model
-                )
-                if (result.isSuccessful) {
-                    handleSuccessfullResult()
-                } else {
+                dialog = createProgressDialog()
+                try {
+                    val result = Repository.createPost(
+                        contentEdt.text.toString(),
+                        linkURLEdt.text.toString(),
+                        model
+                    )
+                    if (result.isSuccessful) {
+                        handleSuccessfullResult()
+                    } else {
+                        handleFailedResult()
+                    }
+                } catch (e: IOException) {
                     handleFailedResult()
+                } finally {
+                    dialog?.dismiss()
                 }
-            } catch (e: IOException) {
-                handleFailedResult()
-            } finally {
-                dialog?.dismiss()
+            }
+            catch (e: IOException){
+                toast(R.string.create_post_error)
             }
         }
     }

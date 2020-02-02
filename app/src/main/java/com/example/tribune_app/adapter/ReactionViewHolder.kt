@@ -15,6 +15,11 @@ import java.util.*
 
 class ReactionViewHolder(val adapter: ReactionAdapter, view: View) : RecyclerView.ViewHolder(view) {
 
+    private val dayMonthFormat = SimpleDateFormat(
+        "dd MMM",
+        Locale.US
+    )
+
     init {
         itemView.setOnClickListener {
             val currentPosition = adapterPosition
@@ -40,10 +45,7 @@ class ReactionViewHolder(val adapter: ReactionAdapter, view: View) : RecyclerVie
             authorTv.text = reaction.user.username
             badgeTv.text = reaction.user.badge
 
-            val dateFormatted = SimpleDateFormat(
-                "dd MMM",
-                Locale.US
-            ).format(Date(reaction.date))
+            val dateFormatted = dayMonthFormat.format(Date(reaction.date))
             createdTv.text = dateFormatted
 
             if (reaction.user.avatar != null) {
